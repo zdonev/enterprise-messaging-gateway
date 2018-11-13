@@ -15,8 +15,10 @@ namespace EnterpriseMessagingGateway.Api
             {
                 cfg.CreateMap<Task, TaskDetailDto>().ReverseMap();
                 cfg.CreateMap<TaskParameter, TaskParameterDto>().ReverseMap();
+                cfg.CreateMap<TaskProperty, TaskPropertyDto>().ReverseMap();
 
                 cfg.CreateMap<TaskParameterCreateDto, TaskParameter>();
+                cfg.CreateMap<TaskPropertyCreateDto, TaskProperty>();
                 cfg.CreateMap<TaskDetailCreateDto, Task>();
 
                 // Mapper.CreateMap<DatabaseA, A>()

@@ -7,6 +7,7 @@ using EnterpriseMessagingGateway.Services.Interfaces.Dto;
 using EnterpriseMessagingGateway.Core.Entities;
 using EnterpriseMessagingGateway.Core.Interfaces;
 using Serilog;
+using EnterpriseMessagingGateway.Services.Helpers;
 
 namespace EnterpriseMessagingGateway.Services
 {
@@ -43,23 +44,15 @@ namespace EnterpriseMessagingGateway.Services
             return AutoMapper.Mapper.Map<TaskDetailDto>(entity);
         }
 
-        public IEnumerable<TaskDetailDto> GetTaskList(string search = null, string sortOrder = null, int? skip = null, int? take = null)
+
+        public TaskDetailDto UpdateTask(TaskDetailDto dto)
         {
+            var entity = AutoMapper.Mapper.Map<Task>(dto);
+            _taskRepository.Update(entity);
 
-            throw new NotImplementedException();
-            //return  _taskRepository.List(s => s.Name.Contains(search) || search == null,
-            //                     null,
-            //                     "",
-            //                     skip,
-            //                     take).ToDTOList();
+            var updatedEntity = _taskRepository.GetById(entity.Id);
 
-        }
-
-        public void UpdateTask(TaskDetailDto dto)
-        {
-            throw new NotImplementedException();
-            //var task = dto.ToEntity();
-            //_taskRepository.Update(task);
+            return AutoMapper.Mapper.Map<TaskDetailDto>(updatedEntity);
         }
     }
 }

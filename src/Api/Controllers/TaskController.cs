@@ -14,22 +14,27 @@ using Serilog;
 using System.Web.Http.Routing;
 using System.Web.Http.Description;
 using EnterpriseMessagingGateway.Services.Interfaces;
+using EnterpriseMessagingGateway.Services.Helpers;
+using EnterpriseMessagingGateway.Api.Extensions;
 
 namespace EnterpriseMessagingGateway.Api.Controllers
 {
-    [Route("api/tasks")]
+    [RoutePrefix("api/tasks")]
     public class TaskController : ApiController
     {
         private readonly ITaskService _taskService;
+        private readonly IReadRepository<Task> _taskReadRepository;
         private readonly ILogger _log = Log.ForContext<TaskController>();
 
-        public TaskController(ITaskService taskService)
+        public TaskController(ITaskService taskService,
+                                IReadRepository<Task> taskReadRepository)
         {
             _taskService = taskService;
+            _taskReadRepository = taskReadRepository;
         }
 
         [HttpPost]
-        [Route("api/tasks")]
+        [Route("")]
         [ResponseType(typeof(TaskDetailDto))]
         public IHttpActionResult CreateTask(TaskDetailCreateDto dto)
         {
@@ -45,7 +50,7 @@ namespace EnterpriseMessagingGateway.Api.Controllers
         }
 
         [HttpGet]
-        [Route("api/tasks/{id}")]
+        [Route("{id}")]
         [ResponseType(typeof(TaskDetailDto))]
         public IHttpActionResult GetTask(int id)
         {
@@ -70,157 +75,134 @@ namespace EnterpriseMessagingGateway.Api.Controllers
 
         }
 
-        //[HttpGet]
-        //[Route("api/tasks", Name = "GetTasks")]        
-        //[ResponseType(typeof(IEnumerable<TaskDetailDto>))]
-        //public IHttpActionResult GetTask([FromUri] TaskResourceParameters parameters)
-        //{
-        //    try
-        //    {
-        //        var tasks = _taskReadRepository.List()
-        //            .OrderBy(t => t.Name).AsQueryable();
+        [HttpGet]
+        [Route("", Name = "GetTasks")]
+        [ResponseType(typeof(IEnumerable<TaskDetailDto>))]
+        public IHttpActionResult GetTasks([FromUri] TaskResourceParameters parameters)
+        {
+            try
+            {
 
-        //        if (!string.IsNullOrEmpty(parameters.Name))
-        //        {
-        //            tasks = tasks.Where(t => t.Name.ToLower() == parameters.Name.ToLower());
-        //        }
+                var pagedList = _taskReadRepository.ToPagedList(parameters);
+                    
 
-        //        if (!string.IsNullOrEmpty(parameters.SearchQuery))
-        //        {
-        //            var searchQuery = parameters.SearchQuery.ToLower();
-        //            tasks = tasks.Where(t => t.Name.ToLower().Contains(searchQuery)
-        //                                     || t.Description.ToLower().Contains(searchQuery));
-        //        }
+                var previousPageLink = pagedList.HasPrevious ?
+                                        CreateTaskResourceUri(parameters,
+                                        ResourceUriType.PreviousPage) : null;
 
+                var nextPageLink = pagedList.HasNext ?
+                                    CreateTaskResourceUri(parameters,
+                                    ResourceUriType.NextPage) : null;
 
-        //        var pagedList = PagedList<Task>.Create(tasks, parameters.PageNumber, parameters.PageSize);
+                var taskDto = AutoMapper.Mapper.Map<IEnumerable<TaskDetailDto>>(pagedList);
 
-        //        if (tasks == null)
-        //        {
-        //            return NotFound();
-        //        }
+                var response = Request.CreateResponse(HttpStatusCode.OK, taskDto);
+                response.Headers.Add("X-Pagination-PageNumber", pagedList.CurrentPage.ToString());
+                response.Headers.Add("X-Pagination", Newtonsoft.Json.JsonConvert.SerializeObject(pagedList.MetaData(previousPageLink, nextPageLink)));
+                return ResponseMessage(response);
+            }
+            catch (Exception ex)
+            {
+                //LOG
+                //return StatusCode(HttpStatusCode.InternalServerError);
+                return InternalServerError(new Exception("An unexpected error occured! Please try again later!"));
 
-        //        var previousPageLink = pagedList.HasPrevious ?
-        //                                CreateTaskResourceUri(parameters,
-        //                                ResourceUriType.PreviousPage) : null;
+            }
 
-        //        var nextPageLink = pagedList.HasNext ?
-        //                            CreateTaskResourceUri(parameters,
-        //                            ResourceUriType.NextPage) : null;               
-
-        //        var taskDto = AutoMapper.Mapper.Map<IEnumerable<TaskDetailDto>>(pagedList);
-
-        //        var response = Request.CreateResponse(HttpStatusCode.OK, taskDto);
-        //        response.Headers.Add("X-Pagination-PageNumber", pagedList.CurrentPage.ToString());
-        //        response.Headers.Add("X-Pagination", Newtonsoft.Json.JsonConvert.SerializeObject(pagedList.MetaData(previousPageLink, nextPageLink)));
-        //        return ResponseMessage(response);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //LOG
-        //        //return StatusCode(HttpStatusCode.InternalServerError);
-        //        return InternalServerError(new Exception("An unexpected error occured! Please try again later!"));
-
-        //    }
-
-        //}
+        }
 
 
-        //[HttpPut]
-        //[Route("api/tasks")]
-        //[ResponseType(typeof(TaskDetailDto))]
-        //public IHttpActionResult UpdateTask([FromBody] TaskDetailDto task)
-        //{
-        //    try
-        //    {
-        //        var taskExists = _taskRepository.GetById(task.Id);
+        [HttpPut]
+        [Route("")]
+        [ResponseType(typeof(TaskDetailDto))]
+        public IHttpActionResult UpdateTask([FromBody] TaskDetailDto dto)
+        {
+            try
+            {
+                var taskExists = _taskService.GetTaskById(dto.Id);
 
-        //        if (taskExists == null)
-        //        {
-        //            return NotFound();
-        //        }
+                if (taskExists == null)
+                {
+                    return NotFound();
+                }
 
-        //        var taskEntity = AutoMapper.Mapper.Map<Task>(task);
-        //         _taskRepository.Update(taskEntity);
+                return Ok(_taskService.UpdateTask(dto));
+            }
+            catch (Exception ex)
+            {
+                //LOG
+                //return StatusCode(HttpStatusCode.InternalServerError);
+                return InternalServerError(new Exception("An unexpected error occured! Please try again later!"));
 
-        //        var taskUpdated = _taskRepository.GetById(task.Id);
+            }
 
-        //        return Ok(AutoMapper.Mapper.Map<TaskDetailDto>(taskUpdated));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //LOG
-        //        //return StatusCode(HttpStatusCode.InternalServerError);
-        //        return InternalServerError(new Exception("An unexpected error occured! Please try again later!"));
+        }
 
-        //    }
+        [HttpDelete]
+        [Route("{id}")]
+        public IHttpActionResult DeleteTask(int id)
+        {
+            try
+            {
+                var entity = _taskService.GetTaskById(id);
 
-        //}
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+                _taskService.DeleteTask(id);
 
-        //[HttpDelete]
-        //[Route("api/tasks/{id}")]
-        //public IHttpActionResult DeleteTask(int id)
-        //{
-        //    try
-        //    {
-        //        var task = _taskRepository.GetById(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                //LOG
+                //return StatusCode(HttpStatusCode.InternalServerError);
+                return InternalServerError(new Exception("An unexpected error occured! Please try again later!"));
 
-        //        if (task == null)
-        //        {
-        //            return NotFound();
-        //        }
-        //         _taskRepository.Delete(task);
+            }
 
-        //        return Ok();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //LOG
-        //        //return StatusCode(HttpStatusCode.InternalServerError);
-        //        return InternalServerError(new Exception("An unexpected error occured! Please try again later!"));
+        }
 
-        //    }
+        private string CreateTaskResourceUri(
+            TaskResourceParameters taskResourceParameters,
+            ResourceUriType type)
+        {
 
-        //}
+            var _urlHelper = new UrlHelper(Request);
 
-        //private string CreateTaskResourceUri(
-        //    TaskResourceParameters taskResourceParameters,
-        //    ResourceUriType type)
-        //{
+            switch (type)
+            {
+                case ResourceUriType.PreviousPage:
+                    return Url.Link("GetTasks",
+                      new
+                      {
+                          searchQuery = taskResourceParameters.SearchQuery,
+                          name = taskResourceParameters.Name,
+                          pageNumber = taskResourceParameters.PageNumber - 1,
+                          pageSize = taskResourceParameters.PageSize
+                      });
+                case ResourceUriType.NextPage:
+                    return Url.Link("GetTasks",
+                      new
+                      {
+                          searchQuery = taskResourceParameters.SearchQuery,
+                          name = taskResourceParameters.Name,
+                          pageNumber = taskResourceParameters.PageNumber + 1,
+                          pageSize = taskResourceParameters.PageSize
+                      });
 
-        //    var _urlHelper = new UrlHelper(Request);
+                default:
+                    return Url.Link("GetTasks",
+                    new
+                    {
+                        searchQuery = taskResourceParameters.SearchQuery,
+                        name = taskResourceParameters.Name,
+                        pageNumber = taskResourceParameters.PageNumber,
+                        pageSize = taskResourceParameters.PageSize
+                    });
+            }
+        }
 
-        //    switch (type)
-        //    {
-        //        case ResourceUriType.PreviousPage:
-        //            return Url.Link("GetTasks",
-        //              new
-        //              {
-        //                  searchQuery = taskResourceParameters.SearchQuery,
-        //                  name = taskResourceParameters.Name,
-        //                  pageNumber = taskResourceParameters.PageNumber - 1,
-        //                  pageSize = taskResourceParameters.PageSize
-        //              });
-        //        case ResourceUriType.NextPage:
-        //            return Url.Link("GetTasks",
-        //              new
-        //              {
-        //                  searchQuery = taskResourceParameters.SearchQuery,
-        //                  name = taskResourceParameters.Name,
-        //                  pageNumber = taskResourceParameters.PageNumber + 1,
-        //                  pageSize = taskResourceParameters.PageSize
-        //              });
-
-        //        default:
-        //            return Url.Link("GetTasks",
-        //            new
-        //            {
-        //                searchQuery = taskResourceParameters.SearchQuery,
-        //                name = taskResourceParameters.Name,
-        //                pageNumber = taskResourceParameters.PageNumber,
-        //                pageSize = taskResourceParameters.PageSize
-        //            });
-        //    }
-        //}
     }
 }
