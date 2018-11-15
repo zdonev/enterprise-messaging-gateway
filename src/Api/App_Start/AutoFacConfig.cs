@@ -33,6 +33,7 @@ namespace EnterpriseMessagingGateway.Api
 
             //Services
             builder.RegisterType<TaskService>().As<ITaskService>();
+            builder.RegisterType<TradingPartnerService>().As<ITradingPartnerService>();
 
             var container = builder.Build();
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);

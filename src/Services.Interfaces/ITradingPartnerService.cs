@@ -10,9 +10,8 @@ namespace EnterpriseMessagingGateway.Services.Interfaces
     public interface ITradingPartnerService
     {
         TradingPartnerDetailDto GetTradingPartnerById(int id);
-        IEnumerable<TradingPartnerDetailDto> GetTradingPartnerList(string search = null, string sortOrder = null, int? skip = null, int? take = null);
-        TradingPartnerDetailDto AddTask(TradingPartnerDetailDto dto);
-        void UpdateTask(TradingPartnerDetailDto dto);
-        void DeleteTask(int id);
+        TradingPartnerDetailDto AddTradingPartner(TradingPartnerDetailCreateDto dto);
+        TradingPartnerDetailDto UpdateTradingPartner(TradingPartnerDetailDto dto);
+        void DeleteTradingPartner(int id);
     }
 }

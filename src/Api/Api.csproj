@@ -129,7 +129,9 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\TaskController.cs" />
+    <Compile Include="Controllers\TradingPartnerController.cs" />
     <Compile Include="Extensions\IReadRepositoryExtensions.cs" />
+    <Compile Include="Extensions\ResourceUriTypeExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

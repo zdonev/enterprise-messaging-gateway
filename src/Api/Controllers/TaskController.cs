@@ -165,43 +165,68 @@ namespace EnterpriseMessagingGateway.Api.Controllers
         }
 
         private string CreateTaskResourceUri(
-            TaskResourceParameters taskResourceParameters,
+            TaskResourceParameters parameters,
             ResourceUriType type)
         {
 
             var _urlHelper = new UrlHelper(Request);
 
+            int pageAdjustment = 0;
+
             switch (type)
             {
                 case ResourceUriType.PreviousPage:
-                    return Url.Link("GetTasks",
-                      new
-                      {
-                          searchQuery = taskResourceParameters.SearchQuery,
-                          name = taskResourceParameters.Name,
-                          pageNumber = taskResourceParameters.PageNumber - 1,
-                          pageSize = taskResourceParameters.PageSize
-                      });
+                    pageAdjustment = -1;
+                    break;                    
                 case ResourceUriType.NextPage:
-                    return Url.Link("GetTasks",
-                      new
-                      {
-                          searchQuery = taskResourceParameters.SearchQuery,
-                          name = taskResourceParameters.Name,
-                          pageNumber = taskResourceParameters.PageNumber + 1,
-                          pageSize = taskResourceParameters.PageSize
-                      });
-
+                    pageAdjustment = 1;
+                    break;
                 default:
-                    return Url.Link("GetTasks",
+                    pageAdjustment = 0;
+                    break;
+            }
+
+            return Url.Link("GetTasks",
                     new
                     {
-                        searchQuery = taskResourceParameters.SearchQuery,
-                        name = taskResourceParameters.Name,
-                        pageNumber = taskResourceParameters.PageNumber,
-                        pageSize = taskResourceParameters.PageSize
+                        searchQuery = parameters.SearchQuery,
+                        name = parameters.Name,
+                        pageNumber = parameters.PageNumber + pageAdjustment,
+                        pageSize = parameters.PageSize,
+                        orderBy = parameters.OrderBy
                     });
-            }
+
+            //switch (type)
+            //{
+            //    case ResourceUriType.PreviousPage:
+            //        return Url.Link("GetTasks",
+            //          new
+            //          {
+            //              searchQuery = taskResourceParameters.SearchQuery,
+            //              name = taskResourceParameters.Name,
+            //              pageNumber = taskResourceParameters.PageNumber - 1,
+            //              pageSize = taskResourceParameters.PageSize
+            //          });
+            //    case ResourceUriType.NextPage:
+            //        return Url.Link("GetTasks",
+            //          new
+            //          {
+            //              searchQuery = taskResourceParameters.SearchQuery,
+            //              name = taskResourceParameters.Name,
+            //              pageNumber = taskResourceParameters.PageNumber + 1,
+            //              pageSize = taskResourceParameters.PageSize
+            //          });
+
+            //    default:
+            //        return Url.Link("GetTasks",
+            //        new
+            //        {
+            //            searchQuery = taskResourceParameters.SearchQuery,
+            //            name = taskResourceParameters.Name,
+            //            pageNumber = taskResourceParameters.PageNumber,
+            //            pageSize = taskResourceParameters.PageSize
+            //        });
+            //}
         }
 
     }
