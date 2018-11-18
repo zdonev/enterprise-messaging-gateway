@@ -8,7 +8,7 @@ using System.Data.Entity;
 
 namespace EnterpriseMessagingGateway.Infrastructure.Repositories
 {
-    public class TradingPartnerRepository : ITradingPartnerRepository
+    public class TradingPartnerRepository : IRepository<TradingPartner>
     {
         private readonly ApplicationDbContext _context;
 
@@ -21,15 +21,6 @@ namespace EnterpriseMessagingGateway.Infrastructure.Repositories
             _context.TradingPartners.Add(entity);
             _context.SaveChanges();
             return entity;
-        }
-
-        public void AddContact(int tpid, TradingPartnerContact entity)
-        {
-            var tp = _context.TradingPartners
-                    .Where(a => a.Id == tpid)
-                    .SingleOrDefault();
-            tp.Contacts.Add(entity);
-            _context.SaveChanges();
         }
 
         public void Delete(TradingPartner entity)
@@ -166,11 +157,11 @@ namespace EnterpriseMessagingGateway.Infrastructure.Repositories
                         .Where(c => c.Id == entityContact.Id)
                         .SingleOrDefault();
 
-                    if (existingChild != null)
+                    if (existingChild != null && existingChild.Id != 0)
                     {
                         // Update child
                         _context.Entry(existingChild).CurrentValues.SetValues(entityContact);
-                        existingChild.Properties.ToList().ForEach(p => _context.ContactProperties.Remove(p));
+                        //existingChild.Properties.ToList().ForEach(p => _context.ContactProperties.Remove(p));
 
                         foreach (var property in entityContact.Properties)
                         {

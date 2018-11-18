@@ -60,8 +60,6 @@
     <Compile Include="Interfaces\IReadRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IAgreementRepository.cs" />
-    <Compile Include="Interfaces\ITradingPartnerRepository.cs" />
-    <Compile Include="Interfaces\ITradingPartnerContactRepository.cs" />
     <Compile Include="Interfaces\ISettings.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

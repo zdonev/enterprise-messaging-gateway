@@ -38,6 +38,7 @@ namespace EnterpriseMessagingGateway.Api.Extensions
 
             if (!propertyMappingService.ValidMappingExistsFor<TradingPartnerDetailDto, TradingPartner>(parameters.OrderBy))
             {
+                throw new Exception("Invalid OrderBy!");
                 //return BadRequest("Invalid OrderBy!!!");
                 //TODO => throw exception and return Bad Request to client
             }
@@ -89,5 +90,8 @@ namespace EnterpriseMessagingGateway.Api.Extensions
 
             return PagedList<TradingPartner>.Create(tp, parameters.PageNumber, parameters.PageSize);
         }
+
+
+
     }
 }

@@ -20,15 +20,17 @@ namespace EnterpriseMessagingGateway.Api
             var config = GlobalConfiguration.Configuration;
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
-            builder.RegisterType<ApplicationDbContext>();
+            builder.RegisterType<ApplicationDbContext>().InstancePerRequest();
             builder.RegisterType<TaskRepository>().As<IRepository<Task>>();
             builder.RegisterType<TaskReadRepository>().As<IReadRepository<Task>>();
-            builder.RegisterType<TradingPartnerContactRepository>().As<ITradingPartnerContactRepository>();
-            builder.RegisterType<TradingPartnerRepository>().As<ITradingPartnerRepository>();
+            builder.RegisterType<TradingPartnerContactRepository>().As<IRepository<TradingPartnerContact>>();
+            builder.RegisterType<TradingPartnerRepository>().As<IRepository<TradingPartner>>();
             builder.RegisterType<TradingPartnerReadRepository>().As<IReadRepository<TradingPartner>>();
             builder.RegisterType<PropertyMappingService>().As<IPropertyMappingService>();
+            builder.RegisterType<Repository<TradingPartnerProperty>>().As<IRepository<TradingPartnerProperty>>();
             builder.RegisterType<Repository<TradingPartnerContact>>().As<IRepository<TradingPartnerContact>>();
             builder.RegisterType<Repository<TradingPartnerContactProperty>>().As<IRepository<TradingPartnerContactProperty>>();
+
 
 
             //Services

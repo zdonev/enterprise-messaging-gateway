@@ -8,7 +8,7 @@ using System.Data.Entity;
 
 namespace EnterpriseMessagingGateway.Infrastructure.Repositories
 {
-    public class TradingPartnerContactRepository : ITradingPartnerContactRepository
+    public class TradingPartnerContactRepository : IRepository<TradingPartnerContact>
     {
         private readonly ApplicationDbContext _context;
 
