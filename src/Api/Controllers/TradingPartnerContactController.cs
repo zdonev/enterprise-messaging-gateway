@@ -19,17 +19,17 @@ namespace EnterpriseMessagingGateway.Api.Controllers
     {
         //private readonly IRepository<TradingPartnerContact> _repository;
         private readonly ITradingPartnerService _tpService;
-        private readonly IRepository<TradingPartnerContact> _contactRepository;
+        private readonly IReadRepository<TradingPartnerContact> _contactReadRepository;
         private IPropertyMappingService _propertyMappingService;
         private readonly ILogger _log = Log.ForContext<TradingPartnerContactController>();
 
 
         public TradingPartnerContactController(ITradingPartnerService tpService,
-                                IRepository<TradingPartnerContact> contactRepository,
+                                IReadRepository<TradingPartnerContact> contactReadRepository,
                                IPropertyMappingService propertyMappingService)
         {
             _tpService = tpService;
-            _contactRepository = contactRepository;
+            _contactReadRepository = contactReadRepository;
             _propertyMappingService = propertyMappingService;
         }
 
@@ -87,7 +87,7 @@ namespace EnterpriseMessagingGateway.Api.Controllers
                 if (!string.IsNullOrEmpty(parameters.SearchQuery))
                 {
                     var searchQuery = parameters.SearchQuery.ToLower();
-                    contacts = _contactRepository.List(c => (c.City.ToLower().Contains(searchQuery)
+                    contacts = _contactReadRepository.List(c => (c.City.ToLower().Contains(searchQuery)
                                                 || c.Country.ToLower().Contains(searchQuery)
                                                 || c.Email.ToLower().Contains(searchQuery)
                                                 || c.Name.ToLower().Contains(searchQuery)
@@ -99,14 +99,10 @@ namespace EnterpriseMessagingGateway.Api.Controllers
                                                 && c.TradingPartner.Id == tpid
                                                 , q => q.OrderBy(e => e.Name), "", parameters.PageNumber - 1, parameters.PageSize).ToList();
 
-
-                    //.Where(t => t.Name.ToLower().Contains(searchQuery)
-                    //                     || t.Description.ToLower().Contains(searchQuery));
                 }
                 else
                 {
-                    //contacts = _repository.List().ToList();
-                    contacts = _contactRepository.List(c => c.TradingPartner.Id == tpid
+                    contacts = _contactReadRepository.List(c => c.TradingPartner.Id == tpid
                                                 , q => q.OrderBy(e => e.Name), "", parameters.PageNumber - 1, parameters.PageSize).ToList();
                 }
 

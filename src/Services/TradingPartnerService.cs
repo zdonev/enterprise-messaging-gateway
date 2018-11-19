@@ -14,16 +14,19 @@ namespace EnterpriseMessagingGateway.Services
     {
         private readonly IRepository<TradingPartner> _tpRepository;
         private readonly IRepository<TradingPartnerProperty> _propertyRepository;
+        private readonly IRepository<TradingPartnerIdentifier> _identifierRepository;
         private readonly IRepository<TradingPartnerContact> _contactRepository;
         private readonly IRepository<TradingPartnerContactProperty> _contactPropRepository;
 
         public TradingPartnerService(IRepository<TradingPartner> tpRepository,
                                         IRepository<TradingPartnerProperty> propertyRepository,
+                                        IRepository<TradingPartnerIdentifier> identifierRepository,
                                         IRepository<TradingPartnerContact> contactRepository,
                                         IRepository<TradingPartnerContactProperty> contactPropRepository)
         {
             _tpRepository = tpRepository;
             _propertyRepository = propertyRepository;
+            _identifierRepository = identifierRepository;
             _contactRepository = contactRepository;
             _contactPropRepository = contactPropRepository;
         }
@@ -52,14 +55,14 @@ namespace EnterpriseMessagingGateway.Services
         }
 
 
-        public TradingPartnerDetailDto UpdateTradingPartner(TradingPartnerDetailDto dto)
+        public TradingPartnerDto UpdateTradingPartner(TradingPartnerDto dto)
         {
             var entity = AutoMapper.Mapper.Map<TradingPartner>(dto);
             _tpRepository.Update(entity);
 
             var updatedEntity = _tpRepository.GetById(entity.Id);
 
-            return AutoMapper.Mapper.Map<TradingPartnerDetailDto>(updatedEntity);
+            return AutoMapper.Mapper.Map<TradingPartnerDto>(updatedEntity);
         }
 
 
@@ -159,6 +162,38 @@ namespace EnterpriseMessagingGateway.Services
         {
             var entity = _propertyRepository.GetById(id);
             _propertyRepository.Delete(entity);
+        }
+
+        public TradingPartnerIdentifierDto AddIdentifier(int tpid, TradingPartnerIdentifierCreateDto dto)
+        {
+            var entity = AutoMapper.Mapper.Map<TradingPartnerIdentifier>(dto);
+
+            var tradingPartner = _tpRepository.GetById(tpid);
+            entity.TradingPartner = tradingPartner;
+            _identifierRepository.Add(entity);
+
+            return AutoMapper.Mapper.Map<TradingPartnerIdentifierDto>(entity);
+        }
+
+        public TradingPartnerIdentifierDto GetIdentifier(int tpid, int id)
+        {
+            var entity = _identifierRepository.GetById(id);
+            return AutoMapper.Mapper.Map<TradingPartnerIdentifierDto>(entity);
+        }
+
+        public TradingPartnerIdentifierDto UpdateIdentifier(int tpid, TradingPartnerIdentifierDto dto)
+        {
+            var entity = AutoMapper.Mapper.Map<TradingPartnerIdentifier>(dto);
+
+            _identifierRepository.Update(entity);
+
+            return AutoMapper.Mapper.Map<TradingPartnerIdentifierDto>(entity);
+        }
+
+        public void DeleteIdentifier(int tpid, int id)
+        {
+            var entity = _identifierRepository.GetById(id);
+            _identifierRepository.Delete(entity);
         }
     }
 }

@@ -129,7 +129,11 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\TaskController.cs" />
+    <Compile Include="Controllers\TaskParameterController.cs" />
+    <Compile Include="Controllers\DocumentTypeResolverController.cs" />
     <Compile Include="Controllers\TradingPartnerContactController.cs" />
+    <Compile Include="Controllers\TradingPartnerIdentifierController.cs" />
+    <Compile Include="Controllers\TaskPropertyController.cs" />
     <Compile Include="Controllers\TradingPartnerPropertyController.cs" />
     <Compile Include="Controllers\TradingPartnerContactPropertyController.cs" />
     <Compile Include="Controllers\TradingPartnerController.cs" />

@@ -11,13 +11,18 @@ namespace EnterpriseMessagingGateway.Services.Interfaces
     {
         TradingPartnerDetailDto GetTradingPartnerById(int id);
         TradingPartnerDetailDto AddTradingPartner(TradingPartnerDetailCreateDto dto);
-        TradingPartnerDetailDto UpdateTradingPartner(TradingPartnerDetailDto dto);
+        TradingPartnerDto UpdateTradingPartner(TradingPartnerDto dto);
         void DeleteTradingPartner(int id);
 
         TradingPartnerPropertyDto AddProperty(int tpid, TradingPartnerPropertyCreateDto dto);
         TradingPartnerPropertyDto GetProperty(int tpid,  int id);
         TradingPartnerPropertyDto UpdateProperty(int tpid, TradingPartnerPropertyDto dto);
         void DeleteProperty(int tpid, int id);
+
+        TradingPartnerIdentifierDto AddIdentifier(int tpid, TradingPartnerIdentifierCreateDto dto);
+        TradingPartnerIdentifierDto GetIdentifier(int tpid, int id);
+        TradingPartnerIdentifierDto UpdateIdentifier(int tpid, TradingPartnerIdentifierDto dto);
+        void DeleteIdentifier(int tpid, int id);
 
         TradingPartnerContactDetailDto AddContact(int tpid, TradingPartnerContactDetailCreateDto dto);
         TradingPartnerContactDetailDto GetContact(int tpid, int id);

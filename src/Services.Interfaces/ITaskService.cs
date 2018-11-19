@@ -11,7 +11,17 @@ namespace EnterpriseMessagingGateway.Services.Interfaces
     {
         TaskDetailDto GetTaskById(int id);                        
         TaskDetailDto AddTask(TaskDetailCreateDto dto);
-        TaskDetailDto UpdateTask(TaskDetailDto dto);
+        TaskDto UpdateTask(TaskDto dto);
         void DeleteTask(int id);
+
+        TaskPropertyDto AddProperty(int taskid, TaskPropertyCreateDto dto);
+        TaskPropertyDto GetProperty(int taskid, int id);
+        TaskPropertyDto UpdateProperty(int taskid, TaskPropertyDto dto);
+        void DeleteProperty(int taskid, int id);
+
+        TaskParameterDto AddParameter(int taskid, TaskParameterCreateDto dto);
+        TaskParameterDto GetParameter(int taskid, int id);
+        TaskParameterDto UpdateParameter(int taskid, TaskParameterDto dto);
+        void DeleteParameter(int taskid, int id);
     }
 }

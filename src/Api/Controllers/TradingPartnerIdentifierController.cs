@@ -14,15 +14,15 @@ using EnterpriseMessagingGateway.Services.Helpers;
 
 namespace EnterpriseMessagingGateway.Api.Controllers
 {
-    [RoutePrefix("api/tradingpartners")]
-    public class TradingPartnerContactPropertyController : ApiController
+    [RoutePrefix("api/tradingpartners/{tpid}/identifiers")]
+    public class TradingPartnerIdentifierController : ApiController
     {
-        private readonly IReadRepository<TradingPartnerContactProperty> _readRepository;
+        private readonly IReadRepository<TradingPartnerIdentifier> _readRepository;
         private readonly ITradingPartnerService _tpService;
         private readonly ILogger _log = Log.ForContext<TradingPartnerContactProperty>();
 
 
-        public TradingPartnerContactPropertyController(IReadRepository<TradingPartnerContactProperty> readRepository,
+        public TradingPartnerIdentifierController(IReadRepository<TradingPartnerIdentifier> readRepository,
                                ITradingPartnerService tpService)
         {
             _readRepository = readRepository;
@@ -30,34 +30,33 @@ namespace EnterpriseMessagingGateway.Api.Controllers
         }
 
         [HttpPost]
-        [Route("{tpid}/contacts/{contactid}/properties")]
-        [ResponseType(typeof(TradingPartnerContactPropertyDto))]
-        public IHttpActionResult CreateContactProperty(int tpid, int contactid, [FromBody] TradingPartnerContactPropertyCreateDto property)
+        [Route("")]
+        [ResponseType(typeof(TradingPartnerIdentifierDto))]
+        public IHttpActionResult Create(int tpid, [FromBody] TradingPartnerIdentifierCreateDto dto)
         {
-            if (property == null)
+            if (dto == null)
             {
                 return BadRequest("Invalid Property Object!");
             }                        
 
-            return Ok(_tpService.AddContactProperty(tpid, contactid, property));
+            return Ok(_tpService.AddIdentifier(tpid, dto));
         }
 
 
         [HttpGet]
-        [Route("{tpid}/contacts/{contactid}/properties/{id}")]
-        [ResponseType(typeof(TradingPartnerContactPropertyDto))]
-        public IHttpActionResult GetContactProperty(int tpid, int contactid, int id)
+        [Route("{id}")]
+        [ResponseType(typeof(TradingPartnerIdentifierDto))]
+        public IHttpActionResult Get(int tpid, int id)
         {
             try
             {
-                var entity = _tpService.GetContactProperty(tpid, contactid, id);
+                var dto = _tpService.GetIdentifier(tpid, id);
 
-                if (entity == null)
+                if (dto == null)
                 {
                     return NotFound();
                 }
                 _log.Information("Received Record {0}", id);
-                var dto = AutoMapper.Mapper.Map<TradingPartnerContactPropertyDto>(entity);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -71,37 +70,37 @@ namespace EnterpriseMessagingGateway.Api.Controllers
 
 
         [HttpGet]
-        [Route("{tpid}/contacts/{contactid}/properties")]
-        [ResponseType(typeof(IEnumerable<TradingPartnerContactPropertyDto>))]
-        public IHttpActionResult GetProperties(int tpid, int contactid, [FromUri] PropertyResourceParameters parameters)
+        [Route("")]
+        [ResponseType(typeof(IEnumerable<TradingPartnerIdentifierDto>))]
+        public IHttpActionResult GetProperties(int tpid, [FromUri] PropertyResourceParameters parameters)
         {
             try
             {
                 parameters = parameters ?? new PropertyResourceParameters();
-                IEnumerable<TradingPartnerContactProperty> entities;
+                IEnumerable<TradingPartnerIdentifier> entities;
 
                 if (!string.IsNullOrEmpty(parameters.SearchQuery))
                 {
                     var searchQuery = parameters.SearchQuery.ToLower();
-                    entities = _readRepository.List(p => (p.Name.ToLower().Contains(searchQuery)
-                                                || p.Value.ToLower().Contains(searchQuery))
-                                                && p.Contact.Id == contactid
-                                                , q => q.OrderBy(e => e.Name), "", parameters.PageNumber - 1, parameters.PageSize).ToList();
+                    entities = _readRepository.List(p => (p.Qualifier.ToLower().Contains(searchQuery)
+                                                || p.Identifier.ToLower().Contains(searchQuery))
+                                                && p.TradingPartner.Id == tpid
+                                                , q => q.OrderBy(e => e.Qualifier), "", parameters.PageNumber - 1, parameters.PageSize).ToList();
                 }
                 else
                 {
-                    entities = _readRepository.List(p => p.Contact.Id == contactid
-                                                , q => q.OrderBy(e => e.Name), "", parameters.PageNumber - 1, parameters.PageSize).ToList();
+                    entities = _readRepository.List(p => p.TradingPartner.Id == tpid
+                                                , q => q.OrderBy(e => e.Qualifier), "", parameters.PageNumber - 1, parameters.PageSize).ToList();
                 }
 
                 if (entities == null)
                 {
                     return NotFound();
                 }
-                var contactsDto = AutoMapper.Mapper.Map<IEnumerable<TradingPartnerContactPropertyDto>>(entities);
+                var identifierList = AutoMapper.Mapper.Map<IEnumerable<TradingPartnerIdentifierDto>>(entities);
 
 
-                return Ok(contactsDto);
+                return Ok(identifierList);
             }
             catch (Exception ex)
             {
@@ -115,22 +114,20 @@ namespace EnterpriseMessagingGateway.Api.Controllers
 
 
         [HttpPut]
-        [Route("{tpid}/contacts/{contactid}/properties")]
-        [ResponseType(typeof(IEnumerable<TradingPartnerContactPropertyDto>))]
-        public IHttpActionResult UpdateProperty(int tpid, int contactid, [FromBody] TradingPartnerContactPropertyDto dto)
+        [Route("")]
+        [ResponseType(typeof(TradingPartnerIdentifierDto))]
+        public IHttpActionResult UpdateProperty(int tpid, [FromBody] TradingPartnerIdentifierDto dto)
         {
             try
             {
-                var entity = _tpService.GetContactProperty(tpid, contactid, dto.Id);
+                var entity = _tpService.GetIdentifier(tpid, dto.Id);
 
                 if (entity == null)
                 {
                     return NotFound();
                 }
 
-                var updatedEntity = _tpService.UpdateContactProperty(tpid, contactid, dto);
-
-                return Ok(AutoMapper.Mapper.Map<TradingPartnerContactPropertyDto>(updatedEntity));
+                return Ok(_tpService.UpdateIdentifier(tpid, dto));
             }
             catch (Exception ex)
             {
@@ -141,19 +138,19 @@ namespace EnterpriseMessagingGateway.Api.Controllers
         }
 
         [HttpDelete]
-        [Route("{tpid}/contacts/{contactid}/properties/{id}")]
-        public IHttpActionResult DeleteProperty(int tpid, int contactid, int id)
+        [Route("{id}")]
+        public IHttpActionResult DeleteProperty(int tpid, int id)
         {
             try
             {
-                var entity = _tpService.GetContactProperty(tpid, contactid, id);
+                var entity = _tpService.GetIdentifier(tpid, id);
 
                 if (entity == null)
                 {
                     return NotFound();
                 }
 
-                _tpService.DeleteContactProperty(tpid, contactid, id);                
+                _tpService.DeleteIdentifier(tpid, id);                
 
                 return Ok();
             }

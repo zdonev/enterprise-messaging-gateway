@@ -58,11 +58,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AgreementService.cs" />
+    <Compile Include="DocumentTypeService.cs" />
     <Compile Include="Helpers\BaseResourceParameters.cs" />
     <Compile Include="Helpers\ContactResourceParameters.cs" />
+    <Compile Include="Helpers\ResolverResourceParameters.cs" />
     <Compile Include="Helpers\IEnumerableExtensions.cs" />
     <Compile Include="Helpers\IQueryableExtensions.cs" />
     <Compile Include="Helpers\PagedList.cs" />
+    <Compile Include="Helpers\DefaultResourceParameters.cs" />
     <Compile Include="Helpers\PropertyResourceParameters.cs" />
     <Compile Include="Helpers\ResourceUriType.cs" />
     <Compile Include="Helpers\TaskResourceParameters.cs" />

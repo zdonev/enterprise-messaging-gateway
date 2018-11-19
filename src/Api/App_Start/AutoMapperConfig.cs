@@ -14,12 +14,21 @@ namespace EnterpriseMessagingGateway.Api
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<Task, TaskDetailDto>().ReverseMap();
+                cfg.CreateMap<Task, TaskDto>().ReverseMap();
                 cfg.CreateMap<TaskParameter, TaskParameterDto>().ReverseMap();
                 cfg.CreateMap<TaskProperty, TaskPropertyDto>().ReverseMap();
 
                 cfg.CreateMap<TaskParameterCreateDto, TaskParameter>();
                 cfg.CreateMap<TaskPropertyCreateDto, TaskProperty>();
                 cfg.CreateMap<TaskDetailCreateDto, Task>();
+
+
+                cfg.CreateMap<DocumentType, DocumentTypeDetailDto>().ReverseMap();
+                cfg.CreateMap<DocumentType, DocumentTypeDto>().ReverseMap();
+                cfg.CreateMap<DocumentTypeResolver, DocumentTypeResolverDto>().ReverseMap();
+                
+                cfg.CreateMap<DocumentTypeCreateDto, DocumentType>().ReverseMap();
+                cfg.CreateMap<DocumentTypeResolverCreateDto, DocumentTypeResolver>().ReverseMap();
 
                 // Mapper.CreateMap<DatabaseA, A>()
                 //.ForMember(dest => dest.Bprop, opt => opt.MapFrom(src => src.Bprop));
@@ -31,6 +40,7 @@ namespace EnterpriseMessagingGateway.Api
 
 
                 cfg.CreateMap<TradingPartner, TradingPartnerDetailDto>().ReverseMap();
+                cfg.CreateMap<TradingPartner, TradingPartnerDto>().ReverseMap();
                 cfg.CreateMap<TradingPartnerIdentifier, TradingPartnerIdentifierDto>().ReverseMap();
                 cfg.CreateMap<TradingPartnerProperty, TradingPartnerPropertyDto>().ReverseMap();
                 cfg.CreateMap<TradingPartnerContact, TradingPartnerContactDetailDto>().ReverseMap();

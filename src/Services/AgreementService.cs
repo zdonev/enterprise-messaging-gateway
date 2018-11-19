@@ -13,9 +13,9 @@ namespace EnterpriseMessagingGateway.Services
 {
     public class AgreementService : IAgreementService //, IAgreementPropertyService
     {
-        private readonly IAgreementRepository _agreementRepository;
+        private readonly IRepository<Agreement> _agreementRepository;
 
-        public AgreementService(IAgreementRepository agreementRepository)
+        public AgreementService(IRepository<Agreement> agreementRepository)
         {
             _agreementRepository = agreementRepository;
         }

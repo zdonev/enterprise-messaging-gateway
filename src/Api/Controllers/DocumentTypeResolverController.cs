@@ -1,67 +1,68 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 using EnterpriseMessagingGateway.Core.Entities;
 using EnterpriseMessagingGateway.Core.Interfaces;
-using EnterpriseMessagingGateway.Services.Interfaces.Dto;
-using Serilog;
-using System.Web.Http.Description;
 using EnterpriseMessagingGateway.Services.Interfaces;
+using EnterpriseMessagingGateway.Services.Interfaces.Dto;
 using EnterpriseMessagingGateway.Services.Helpers;
 using EnterpriseMessagingGateway.Api.Extensions;
 using System.Web.Http.Routing;
 
 namespace EnterpriseMessagingGateway.Api.Controllers
 {
-    [RoutePrefix("api/tradingpartners")]
-    public class TradingPartnerController : ApiController
+    [RoutePrefix("api/doctypes/{doctypeid}/resolvers")]
+    public class DocumentTypeResolverController : ApiController
     {
-        private readonly ITradingPartnerService _tpService;
-        private readonly IReadRepository<TradingPartner> _tpReadRepository;
+        private readonly IReadRepository<DocumentTypeResolver> _readRepository;
+        private readonly IDocumentTypeService _docTypeService;
         private IPropertyMappingService _propertyMappingService;
-        private readonly ILogger _log = Log.ForContext<TradingPartnerController>();
-        
+        private readonly ILogger _log = Log.ForContext<TradingPartnerContactProperty>();
 
-        public TradingPartnerController(ITradingPartnerService tpService,
-                               IReadRepository<TradingPartner> tpReadRepository,
-                               IPropertyMappingService propertyMappingService)
+
+        public DocumentTypeResolverController(IReadRepository<DocumentTypeResolver> readRepository,
+                                                IDocumentTypeService docTypeService,
+                                                IPropertyMappingService propertyMappingService)
         {
-            _tpService = tpService;
-            _tpReadRepository = tpReadRepository;
+            _readRepository = readRepository;
+            _docTypeService = docTypeService;
             _propertyMappingService = propertyMappingService;
         }
 
         [HttpPost]
         [Route("")]
-        [ResponseType(typeof(TradingPartnerDetailDto))]
-        public IHttpActionResult CreateTradingPartner(TradingPartnerDetailCreateDto dto)
+        [ResponseType(typeof(DocumentTypeResolverDto))]
+        public IHttpActionResult Create(int doctypeid, [FromBody] DocumentTypeResolverCreateDto resolver)
         {
-            if (dto == null)
+            if (resolver == null)
             {
-                return BadRequest("Invalid Trading Partner Object!");
-            }
+                return BadRequest("Invalid Property Object!");
+            }                        
 
-            return Ok(_tpService.AddTradingPartner(dto));
+            return Ok(_docTypeService.AddResolver(doctypeid, resolver));
         }
+
 
         [HttpGet]
         [Route("{id}")]
-        [ResponseType(typeof(TradingPartnerDetailDto))]
-        public IHttpActionResult GetTradingPartner(int id)
+        [ResponseType(typeof(DocumentTypeResolverDto))]
+        public IHttpActionResult Get(int doctypeid, int id)
         {
             try
             {
-                var tp = _tpService.GetTradingPartnerById(id);
+                var dto = _docTypeService.GetResolver(doctypeid, id);
 
-                if (tp == null)
+                if (dto == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(tp);
+                return Ok(dto);
             }
             catch (Exception ex)
             {
@@ -70,17 +71,17 @@ namespace EnterpriseMessagingGateway.Api.Controllers
                 return InternalServerError(new Exception("An unexpected error occured! Please try again later!"));
 
             }
-
         }
 
+
         [HttpGet]
-        [Route("", Name = "GetTradingPartners")]
-        [ResponseType(typeof(IEnumerable<TradingPartnerDetailDto>))]
-        public IHttpActionResult GetTradingPartners([FromUri] TradingPartnerResourceParameters parameters)
+        [Route("", Name = "GetDocumentTypeResolvers")]
+        [ResponseType(typeof(IEnumerable<DocumentTypeResolverDto>))]
+        public IHttpActionResult GetList(int doctypeid, [FromUri] ResolverResourceParameters parameters)
         {
             try
             {
-                var pagedList = _tpReadRepository.ToPagedList(parameters, _propertyMappingService);
+                var pagedList = _readRepository.ToPagedList(parameters, _propertyMappingService);
 
                 var previousPageLink = pagedList.HasPrevious ?
                                         CreateResourceUri(parameters,
@@ -90,8 +91,7 @@ namespace EnterpriseMessagingGateway.Api.Controllers
                                     CreateResourceUri(parameters,
                                     ResourceUriType.NextPage) : null;
 
-                _log.Information("Received Record {0}");
-                var tpDto = AutoMapper.Mapper.Map<IEnumerable<TradingPartnerDetailDto>>(pagedList);
+                var tpDto = AutoMapper.Mapper.Map<IEnumerable<DocumentTypeResolverDto>>(pagedList);
                 var response = Request.CreateResponse(HttpStatusCode.OK, tpDto);
                 response.Headers.Add("X-Pagination-PageNumber", pagedList.CurrentPage.ToString());
                 response.Headers.Add("X-Pagination", Newtonsoft.Json.JsonConvert.SerializeObject(pagedList.MetaData(previousPageLink, nextPageLink)));
@@ -107,47 +107,45 @@ namespace EnterpriseMessagingGateway.Api.Controllers
 
         }
 
+
         [HttpPut]
         [Route("")]
-        [ResponseType(typeof(TradingPartnerDto))]
-        public IHttpActionResult UpdateTradingPartner([FromBody] TradingPartnerDto dto)
+        [ResponseType(typeof(DocumentTypeResolverDto))]
+        public IHttpActionResult Update(int doctypeid, [FromBody] DocumentTypeResolverDto dto)
         {
             try
             {
-                var tpExists = _tpService.GetTradingPartnerById(dto.Id);
+                var entity = _docTypeService.GetResolver(doctypeid, dto.Id);
 
-                if (tpExists == null)
+                if (entity == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(_tpService.UpdateTradingPartner(dto));
-
+                return Ok(_docTypeService.UpdateResolver(doctypeid, dto));
             }
             catch (Exception ex)
             {
                 //LOG
                 //return StatusCode(HttpStatusCode.InternalServerError);
                 return InternalServerError(new Exception("An unexpected error occured! Please try again later!"));
-
             }
-
         }
 
         [HttpDelete]
         [Route("{id}")]
-        [ResponseType(typeof(TradingPartner))]
-        public IHttpActionResult DeleteTradingPartner(int id)
+        public IHttpActionResult Delete(int doctypeid, int id)
         {
             try
             {
-                var entity = _tpService.GetTradingPartnerById(id);
+                var entity = _docTypeService.GetResolver(doctypeid, id);
 
                 if (entity == null)
                 {
                     return NotFound();
                 }
-                _tpService.DeleteTradingPartner(id);
+
+                _docTypeService.DeleteResolver(doctypeid, id);                
 
                 return Ok();
             }
@@ -161,9 +159,8 @@ namespace EnterpriseMessagingGateway.Api.Controllers
 
         }
 
-
         private string CreateResourceUri(
-            TradingPartnerResourceParameters parameters,
+            ResolverResourceParameters parameters,
             ResourceUriType type)
         {
 
@@ -171,7 +168,7 @@ namespace EnterpriseMessagingGateway.Api.Controllers
 
             int pageAdjustment = type.GetPageAdjustment();
 
-            return Url.Link("GetTradingPartners",
+            return Url.Link("GetDocumentTypeResolvers",
                     new
                     {
                         searchQuery = parameters.SearchQuery,
@@ -180,12 +177,8 @@ namespace EnterpriseMessagingGateway.Api.Controllers
                         pageSize = parameters.PageSize,
                         orderBy = parameters.OrderBy,
                         description = parameters.Description,
-                        identifier = parameters.Identifier,
-                        propertyName = parameters.PropertyName,
-                        propertyValue = parameters.PropertyValue,
-                        qualifier = parameters.Qualifier
+                        value = parameters.Value
                     });
         }
-
     }
 }

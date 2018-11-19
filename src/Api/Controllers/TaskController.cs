@@ -114,8 +114,8 @@ namespace EnterpriseMessagingGateway.Api.Controllers
 
         [HttpPut]
         [Route("")]
-        [ResponseType(typeof(TaskDetailDto))]
-        public IHttpActionResult UpdateTask([FromBody] TaskDetailDto dto)
+        [ResponseType(typeof(TaskDto))]
+        public IHttpActionResult UpdateTask([FromBody] TaskDto dto)
         {
             try
             {
@@ -171,20 +171,7 @@ namespace EnterpriseMessagingGateway.Api.Controllers
 
             var _urlHelper = new UrlHelper(Request);
 
-            int pageAdjustment = 0;
-
-            switch (type)
-            {
-                case ResourceUriType.PreviousPage:
-                    pageAdjustment = -1;
-                    break;                    
-                case ResourceUriType.NextPage:
-                    pageAdjustment = 1;
-                    break;
-                default:
-                    pageAdjustment = 0;
-                    break;
-            }
+            int pageAdjustment = type.GetPageAdjustment();
 
             return Url.Link("GetTasks",
                     new
@@ -195,38 +182,6 @@ namespace EnterpriseMessagingGateway.Api.Controllers
                         pageSize = parameters.PageSize,
                         orderBy = parameters.OrderBy
                     });
-
-            //switch (type)
-            //{
-            //    case ResourceUriType.PreviousPage:
-            //        return Url.Link("GetTasks",
-            //          new
-            //          {
-            //              searchQuery = taskResourceParameters.SearchQuery,
-            //              name = taskResourceParameters.Name,
-            //              pageNumber = taskResourceParameters.PageNumber - 1,
-            //              pageSize = taskResourceParameters.PageSize
-            //          });
-            //    case ResourceUriType.NextPage:
-            //        return Url.Link("GetTasks",
-            //          new
-            //          {
-            //              searchQuery = taskResourceParameters.SearchQuery,
-            //              name = taskResourceParameters.Name,
-            //              pageNumber = taskResourceParameters.PageNumber + 1,
-            //              pageSize = taskResourceParameters.PageSize
-            //          });
-
-            //    default:
-            //        return Url.Link("GetTasks",
-            //        new
-            //        {
-            //            searchQuery = taskResourceParameters.SearchQuery,
-            //            name = taskResourceParameters.Name,
-            //            pageNumber = taskResourceParameters.PageNumber,
-            //            pageSize = taskResourceParameters.PageSize
-            //        });
-            //}
         }
 
     }

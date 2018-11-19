@@ -46,7 +46,13 @@
     <Compile Include="Dto\AgreementResolversDTO.cs" />
     <Compile Include="Dto\AgreementTaskDTO.cs" />
     <Compile Include="Dto\AgreementTaskParameterDTO.cs" />
+    <Compile Include="Dto\DocumentTypeCreateDto.cs" />
+    <Compile Include="Dto\DocumentTypeDetailDto.cs" />
+    <Compile Include="Dto\DocumentTypeDto.cs" />
+    <Compile Include="Dto\DocumentTypeResolverCreateDto.cs" />
+    <Compile Include="Dto\DocumentTypeResolverDto.cs" />
     <Compile Include="Dto\TaskDetailCreateDto.cs" />
+    <Compile Include="Dto\TaskDto.cs" />
     <Compile Include="Dto\TaskDetailDto.cs" />
     <Compile Include="Dto\TaskParameterCreateDto.cs" />
     <Compile Include="Dto\TaskParameterDto.cs" />
@@ -57,6 +63,7 @@
     <Compile Include="Dto\TradingPartnerContactPropertyCreateDto.cs" />
     <Compile Include="Dto\TradingPartnerContactPropertyDto.cs" />
     <Compile Include="Dto\TradingPartnerDetailCreateDto.cs" />
+    <Compile Include="Dto\TradingPartnerDto.cs" />
     <Compile Include="Dto\TradingPartnerDetailDto.cs" />
     <Compile Include="Dto\TradingPartnerIdentifierCreateDto.cs" />
     <Compile Include="Dto\TradingPartnerIdentifierDto.cs" />
@@ -68,6 +75,7 @@
     <Compile Include="IAgreementService.cs" />
     <Compile Include="IPropertyMapping.cs" />
     <Compile Include="IPropertyMappingService.cs" />
+    <Compile Include="IDocumentTypeService.cs" />
     <Compile Include="ITaskService.cs" />
     <Compile Include="ITradingPartnerService.cs" />
     <Compile Include="ITypeHelperService.cs" />
