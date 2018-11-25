@@ -383,7 +383,7 @@
 							"script": {
 								"id": "697cdedd-8c66-4154-8ab4-f19b4f2181b5",
 								"exec": [
-									"var jsonData = JSON.parse(responseBody);",
+									"//var jsonData = JSON.parse(responseBody);",
 									"",
 									"",
 									""
