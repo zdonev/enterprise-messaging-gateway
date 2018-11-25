@@ -24,6 +24,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "integration", "integration", "{7E8C330F-75C2-47B3-8BE7-55941BB5CE40}"
 	ProjectSection(SolutionItems) = preProject
 		..\test\integration\Enterprise Messaging Gateway PROD.postman_environment.json = ..\test\integration\Enterprise Messaging Gateway PROD.postman_environment.json
+		..\test\integration\Enterprise Messaging Gateway QA.postman_environment.json = ..\test\integration\Enterprise Messaging Gateway QA.postman_environment.json
 		..\test\integration\Enterprise Messaging Gateway.postman_collection.json = ..\test\integration\Enterprise Messaging Gateway.postman_collection.json
 	EndProjectSection
 EndProject

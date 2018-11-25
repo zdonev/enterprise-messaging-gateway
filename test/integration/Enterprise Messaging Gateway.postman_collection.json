@@ -80,6 +80,22 @@
 				},
 				{
 					"name": "Create Trading Partner",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ee1fa783-b37c-451e-8479-559e72afd400",
+								"exec": [
+									"",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"",
+									"postman.setEnvironmentVariable(\"trading_partner_id\", jsResponse.Id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -90,7 +106,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"Name\": \"Northern Star\",\r\n  \"Description\": \"Trading Partner Northern Star\",\r\n  \"Identifiers\": [\r\n    {\r\n      \"Qualifier\": \"ICSM2\",\r\n      \"Identifier\": \"25\"\r\n    }\r\n  ],\r\n  \"Properties\": [\r\n    {\r\n      \"Name\": \"IsEnabled\",\r\n      \"Value\": \"true\"\r\n    },\r\n    {\r\n      \"Name\": \"IsEnabled2\",\r\n      \"Value\": \"true\"\r\n    }\r\n  ],\r\n  \"Contacts\": [\r\n    {\r\n      \"Name\": \"Jeff Star\",\r\n      \"Role\": \"IT\",\r\n      \"Email\": \"jeff@gmail.com\",\r\n      \"Phone\": \"507-720-4000\",\r\n      \"Street\": \"109 Street Sample\",\r\n      \"City\": \"Mankato\",\r\n      \"State\": \"MN\",\r\n      \"PostalCode\": \"56001\",\r\n      \"Country\": \"USA\",\r\n      \"Properties\": [\r\n        {\r\n          \"Name\": \"IsPrimary\",\r\n          \"Value\": \"true\"\r\n        },\r\n        {\r\n          \"Name\": \"IsActive\",\r\n          \"Value\": \"false\"\r\n        }\r\n      ]\r\n    }\r\n  ]\r\n}"
+							"raw": "{\r\n  \"Name\": \"{{$guid}}\",\r\n  \"Description\": \"Trading Partner Northern Star\",\r\n  \"Identifiers\": [\r\n    {\r\n      \"Qualifier\": \"{{$guid}}\",\r\n      \"Identifier\": \"25\"\r\n    }\r\n  ],\r\n  \"Properties\": [\r\n    {\r\n      \"Name\": \"IsEnabled\",\r\n      \"Value\": \"true\"\r\n    },\r\n    {\r\n      \"Name\": \"IsEnabled2\",\r\n      \"Value\": \"true\"\r\n    }\r\n  ],\r\n  \"Contacts\": [\r\n    {\r\n      \"Name\": \"Jeff Star\",\r\n      \"Role\": \"IT\",\r\n      \"Email\": \"jeff@gmail.com\",\r\n      \"Phone\": \"507-720-4000\",\r\n      \"Street\": \"109 Street Sample\",\r\n      \"City\": \"Mankato\",\r\n      \"State\": \"MN\",\r\n      \"PostalCode\": \"56001\",\r\n      \"Country\": \"USA\",\r\n      \"Properties\": [\r\n        {\r\n          \"Name\": \"IsPrimary\",\r\n          \"Value\": \"true\"\r\n        },\r\n        {\r\n          \"Name\": \"IsActive\",\r\n          \"Value\": \"false\"\r\n        }\r\n      ]\r\n    }\r\n  ]\r\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/tradingpartners",
@@ -369,8 +385,6 @@
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);",
 									"",
-									"tests[\"Validate Name\"] = jsonData.Name === \"A\";",
-									"tests[\"Validate Value\"] = jsonData.Value === \"B\";",
 									"",
 									""
 								],
@@ -1486,10 +1500,11 @@
 						{
 							"listen": "test",
 							"script": {
-								"type": "text/javascript",
+								"id": "2144a497-0391-4699-9cd9-56926fd5227b",
 								"exec": [
-									"tests[\"Status code is 200\"] = responseCode.code === 200;"
-								]
+									"//tests[\"Status code is 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
 							}
 						}
 					],
