@@ -1,0 +1,1673 @@
+{
+	"info": {
+		"_postman_id": "0b9cff40-eaff-4e11-17c7-b89716a2daca",
+		"name": "Enterprise Messaging Gateway",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Setup",
+			"item": [
+				{
+					"name": "Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9df718b2-767a-4641-94a2-28291f85fe3e",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var schema =  pm.variables.get(\"task_schema_detail\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(JSON.parse(responseBody), schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									"",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"",
+									"postman.setEnvironmentVariable(\"task_id\", jsResponse.Id);",
+									"",
+									"",
+									"pm.test(\"Content is valid\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    console.log(jsonData.TaskParameters[0].Key);",
+									"    pm.expect(jsonData.TaskParameters[0].Key).to.eql(\"username\");",
+									"    pm.expect(jsonData.TaskParameters[1].Key).to.eql(\"timeout\");",
+									"});",
+									"",
+									"tests[\"Task Parameter is valid\"] = jsResponse.TaskParameters[0].Key === \"username\";",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Name\": \"{{$guid}}\",\n  \"Description\": \"Test\",\n  \"GlobalTracking\": true,\n  \"GlobalArchiving\": true,\n  \"Type\": \"External\",\n  \"TaskParameters\": [\n    {\n      \"Key\": \"username\",\n      \"Description\": \"Username making the request (used for logging)\",\n      \"Required\": true,\n      \"Type\": \"Text\"\n    },\n    {\n      \"Key\": \"timeout\",\n      \"Description\": \"Request timeout in seconds.\",\n      \"Required\": true,\n      \"Type\": \"Number\"\n    }\n  ],\n  \"Properties\": [\n    {\n      \"Name\": \"IsHttp\",\n      \"Value\": \"true\"\n    },\n    {\n      \"Name\": \"Endpoint\",\n      \"Value\": \"Http://Post\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Trading Partner",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Name\": \"Northern Star\",\r\n  \"Description\": \"Trading Partner Northern Star\",\r\n  \"Identifiers\": [\r\n    {\r\n      \"Qualifier\": \"ICSM2\",\r\n      \"Identifier\": \"25\"\r\n    }\r\n  ],\r\n  \"Properties\": [\r\n    {\r\n      \"Name\": \"IsEnabled\",\r\n      \"Value\": \"true\"\r\n    },\r\n    {\r\n      \"Name\": \"IsEnabled2\",\r\n      \"Value\": \"true\"\r\n    }\r\n  ],\r\n  \"Contacts\": [\r\n    {\r\n      \"Name\": \"Jeff Star\",\r\n      \"Role\": \"IT\",\r\n      \"Email\": \"jeff@gmail.com\",\r\n      \"Phone\": \"507-720-4000\",\r\n      \"Street\": \"109 Street Sample\",\r\n      \"City\": \"Mankato\",\r\n      \"State\": \"MN\",\r\n      \"PostalCode\": \"56001\",\r\n      \"Country\": \"USA\",\r\n      \"Properties\": [\r\n        {\r\n          \"Name\": \"IsPrimary\",\r\n          \"Value\": \"true\"\r\n        },\r\n        {\r\n          \"Name\": \"IsActive\",\r\n          \"Value\": \"false\"\r\n        }\r\n      ]\r\n    }\r\n  ]\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsResponse = JSON.parse(responseBody);",
+									"",
+									"postman.setEnvironmentVariable(\"doc_type_id\", jsResponse.Id);",
+									"",
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"tests[\"Rank Test\"] = jsResponse.Rank === 1;",
+									"tests[\"Name Test\"] = jsResponse.Name === \"sender\";",
+									"tests[\"Value Test\"] = jsResponse.Value === \"/cxml/header/credentials/from/id\";",
+									"tests[\"Description Test\"] = jsResponse.Description === \"sender id\";",
+									"tests[\"LookupType Test\"] = jsResponse.LookupType === \"System\";",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Rank\": 1,\r\n  \"Name\": \"sender\",\r\n  \"Value\": \"/cxml/header/credentials/from/id\",\r\n  \"Description\": \"sender id\",\r\n  \"LookupType\": \"System\"\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/doctypes/1/resolvers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctypes",
+								"1",
+								"resolvers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ec9bf2b9-97bd-480d-a643-5bc16a30635d",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"console.log(\"test\");",
+									"",
+									"var schema =  pm.variables.get(\"task_schema_detail\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(JSON.parse(responseBody), schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/{{task_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"{{task_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Task List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Task Filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks?PageNumber=1&PageSize=5&name=Testss",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks"
+							],
+							"query": [
+								{
+									"key": "PageNumber",
+									"value": "1"
+								},
+								{
+									"key": "PageSize",
+									"value": "5"
+								},
+								{
+									"key": "name",
+									"value": "Testss"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Task Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks?PageNumber=1&PageSize=5&searchQuery=t",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks"
+							],
+							"query": [
+								{
+									"key": "PageNumber",
+									"value": "1"
+								},
+								{
+									"key": "PageSize",
+									"value": "5"
+								},
+								{
+									"key": "searchQuery",
+									"value": "t"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Task",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Id\": 1,\n  \"Name\": \"ATestss_________\",\n  \"Description\": \"Test ZoranD\",\n  \"GlobalTracking\": false,\n  \"GlobalArchiving\": true,\n  \"Type\": \"External\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Task Properties",
+			"item": [
+				{
+					"name": "Create Property",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Name\": \"a\",\n  \"Value\": \"a\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/1/properties",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"1",
+								"properties"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Property",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "697cdedd-8c66-4154-8ab4-f19b4f2181b5",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Validate Name\"] = jsonData.Name === \"A\";",
+									"tests[\"Validate Value\"] = jsonData.Value === \"B\";",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/1/properties/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"1",
+								"properties",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Properties",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/1/properties",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"1",
+								"properties"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Properties SearchQuery",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/1/properties?searchQuery=z",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"1",
+								"properties"
+							],
+							"query": [
+								{
+									"key": "searchQuery",
+									"value": "z"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Property",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Id\": 1,\n  \"Name\": \"A\",\n  \"Value\": \"B\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/1/properties",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"1",
+								"properties"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Property",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/1/properties/1002",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"1",
+								"properties",
+								"1002"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Task Parameters",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Key\": \"A\",\n    \"Description\": \"Test\",\n    \"Required\": true,\n    \"Type\": \"Text\"\n  }"
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/1/parameters",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"1",
+								"parameters"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/1/parameters/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"1",
+								"parameters",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get List",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"console.log('Test');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/1/parameters",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"1",
+								"parameters"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get SearchQuery",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/1/parameters?searchQuery=z",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"1",
+								"parameters"
+							],
+							"query": [
+								{
+									"key": "searchQuery",
+									"value": "z"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Id\": 1,\n  \"Key\": \"taskname ZZZZZ\",\n  \"Description\": \"Test\",\n  \"Required\": true,\n  \"Type\": \"Text\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/1/parameters",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"1",
+								"parameters"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{base_url}}/tasks/1/parameters/2003",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"1",
+								"parameters",
+								"2003"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Trading Partners",
+			"item": [
+				{
+					"name": "Get Trading Partner",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Trading Partner",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Id\": 1002,\n  \"Name\": \"TPXXX\",\n  \"Description\": \"Trading Partner Northern Star\",\n  \"IsEnabled\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Trading Partner Filter",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners?PropertyName=IsEnabled",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners"
+							],
+							"query": [
+								{
+									"key": "PropertyName",
+									"value": "IsEnabled"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Trading Partner OrderBy",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners?OrderBy=Name desc&Name=3M&PropertyName=SendEmailNotification",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners"
+							],
+							"query": [
+								{
+									"key": "OrderBy",
+									"value": "Name desc"
+								},
+								{
+									"key": "Name",
+									"value": "3M"
+								},
+								{
+									"key": "PropertyName",
+									"value": "SendEmailNotification"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Trading Partner Properties",
+			"item": [
+				{
+					"name": "Create Property",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Name\": \"a\",\n  \"Value\": \"a\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/properties",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"properties"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Property",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/properties/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"properties",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Properties",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/properties",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"properties"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Properties SearchQuery",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/properties?searchQuery=z",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"properties"
+							],
+							"query": [
+								{
+									"key": "searchQuery",
+									"value": "z"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Property",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Id\": 1,\n  \"Name\": \"A\",\n  \"Value\": \"B\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/properties",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"properties"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Property",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/properties/1002",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"properties",
+								"1002"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Trading Partner Identifiers",
+			"item": [
+				{
+					"name": "Create Identifier",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Qualifier\": \"a\",\n  \"Identifier\": \"a\"\n}\n"
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/identifiers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"identifiers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Identifier",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/identifiers/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"identifiers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Identifiers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/identifiers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"identifiers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Identifiers SearchQuery",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/identifiers?searchQuery=i",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"identifiers"
+							],
+							"query": [
+								{
+									"key": "searchQuery",
+									"value": "i"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Identifier",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Id\": 1,\n  \"Qualifier\": \"A\",\n  \"Identifier\": \"B\"\n}\n"
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/identifiers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"identifiers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Identifier",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/identifiers/1002",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"identifiers",
+								"1002"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Trading Partner Contacts",
+			"item": [
+				{
+					"name": "Create Contact",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n      \"Name\": \"Zoran Donev\",\n      \"Role\": \"IT\",\n      \"Email\": \"zd@gmail.com\",\n      \"Phone\": \"507-720-4000\",\n      \"Street\": \"109 Street Sample\",\n      \"City\": \"Mankato\",\n      \"State\": \"MN\",\n      \"PostalCode\": \"56001\",\n      \"Country\": \"USA\",\n      \"Properties\": [\n        {\n          \"Name\": \"IsPrimary\",\n          \"Value\": \"true\"\n        },\n        {\n          \"Name\": \"IsActive\",\n          \"Value\": \"false\"\n        }\n      ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/contacts/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"contacts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contact",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/contacts/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"contacts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contacts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/contacts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contact",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Id\": 1003,\n  \"Name\": \"Z\",\n  \"Role\": \"Z\",\n  \"Email\": \"Z\",\n  \"Phone\": \"Z\",\n  \"Street\": \"Z\",\n  \"City\": \"Z\",\n  \"State\": \"Z\",\n  \"PostalCode\": \"Z\",\n  \"Country\": \"Z\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/contacts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Contact",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/contacts/5",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"contacts",
+								"5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Trading Partner Contact Properties",
+			"item": [
+				{
+					"name": "Create Property",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Name\": \"a\",\n  \"Value\": \"a\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/contacts/1/properties",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"contacts",
+								"1",
+								"properties"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Property",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/contacts/1/properties/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"contacts",
+								"1",
+								"properties",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Properties",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/contacts/1/properties",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"contacts",
+								"1",
+								"properties"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Properties SearchQuery",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/contacts/1/properties?searchQuery=z",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"contacts",
+								"1",
+								"properties"
+							],
+							"query": [
+								{
+									"key": "searchQuery",
+									"value": "z"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Property",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Id\": 1007,\n  \"Name\": \"A\",\n  \"Value\": \"B\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/contacts/1/properties",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"contacts",
+								"1",
+								"properties"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Property",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/1/contacts/1/properties/1008",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"1",
+								"contacts",
+								"1",
+								"properties",
+								"1008"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Document Type Resolvers",
+			"item": [
+				{
+					"name": "Get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsResponse = JSON.parse(responseBody);",
+									"",
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"//tests[\"Rank Test\"] = jsResponse.Id === doc_type_id;",
+									"tests[\"Rank Test\"] = jsResponse.Rank === 1;",
+									"tests[\"Name Test\"] = jsResponse.Name === \"sender\";",
+									"tests[\"Value Test\"] = jsResponse.Value === \"/cxml/header/credentials/from/id\";",
+									"tests[\"Description Test\"] = jsResponse.Description === \"sender id\";",
+									"tests[\"LookupType Test\"] = jsResponse.LookupType === \"System\";"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/doctypes/1/resolvers/{{doc_type_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctypes",
+								"1",
+								"resolvers",
+								"{{doc_type_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/doctypes/1/resolvers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctypes",
+								"1",
+								"resolvers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Task Filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks?PageNumber=1&PageSize=5&name=Testss",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks"
+							],
+							"query": [
+								{
+									"key": "PageNumber",
+									"value": "1"
+								},
+								{
+									"key": "PageSize",
+									"value": "5"
+								},
+								{
+									"key": "name",
+									"value": "Testss"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Task Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks?PageNumber=1&PageSize=5&searchQuery=t",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks"
+							],
+							"query": [
+								{
+									"key": "PageNumber",
+									"value": "1"
+								},
+								{
+									"key": "PageSize",
+									"value": "5"
+								},
+								{
+									"key": "searchQuery",
+									"value": "t"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Task",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Id\": 1,\n  \"Name\": \"ATestss_________\",\n  \"Description\": \"Test ZoranD\",\n  \"GlobalTracking\": false,\n  \"GlobalArchiving\": true,\n  \"Type\": \"External\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Task",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cleanup",
+			"item": [
+				{
+					"name": "Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{base_url}}/tasks/{{task_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"{{task_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

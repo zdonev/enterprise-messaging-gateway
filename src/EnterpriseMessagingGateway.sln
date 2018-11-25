@@ -15,6 +15,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Servic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Interfaces", "Services.Interfaces\Services.Interfaces.csproj", "{80FD049B-1517-4312-A698-7232DD8C4D36}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{FE30D223-8C2E-4E53-9E16-645B5DC545ED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit", "unit", "{169C8048-D4F7-4392-991B-B74B48F1D167}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "..\test\unit\UnitTests\UnitTests.csproj", "{09792B29-B1A2-4E6E-B56A-B80298F6C834}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "integration", "integration", "{7E8C330F-75C2-47B3-8BE7-55941BB5CE40}"
+	ProjectSection(SolutionItems) = preProject
+		..\test\integration\Enterprise Messaging Gateway PROD.postman_environment.json = ..\test\integration\Enterprise Messaging Gateway PROD.postman_environment.json
+		..\test\integration\Enterprise Messaging Gateway.postman_collection.json = ..\test\integration\Enterprise Messaging Gateway.postman_collection.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +53,10 @@ Global
 		{80FD049B-1517-4312-A698-7232DD8C4D36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80FD049B-1517-4312-A698-7232DD8C4D36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80FD049B-1517-4312-A698-7232DD8C4D36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09792B29-B1A2-4E6E-B56A-B80298F6C834}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09792B29-B1A2-4E6E-B56A-B80298F6C834}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09792B29-B1A2-4E6E-B56A-B80298F6C834}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09792B29-B1A2-4E6E-B56A-B80298F6C834}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,5 +67,8 @@ Global
 		{36F8AE8F-58A3-442E-833D-A2E4A4FF12F6} = {273C4F41-D4F6-4122-8AF0-571B6097E8C8}
 		{CAFAF0AB-83AC-45D5-81CF-F64C3EF3E14C} = {273C4F41-D4F6-4122-8AF0-571B6097E8C8}
 		{80FD049B-1517-4312-A698-7232DD8C4D36} = {273C4F41-D4F6-4122-8AF0-571B6097E8C8}
+		{169C8048-D4F7-4392-991B-B74B48F1D167} = {FE30D223-8C2E-4E53-9E16-645B5DC545ED}
+		{09792B29-B1A2-4E6E-B56A-B80298F6C834} = {169C8048-D4F7-4392-991B-B74B48F1D167}
+		{7E8C330F-75C2-47B3-8BE7-55941BB5CE40} = {FE30D223-8C2E-4E53-9E16-645B5DC545ED}
 	EndGlobalSection
 EndGlobal
