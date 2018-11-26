@@ -20,10 +20,11 @@
 									"    pm.response.to.have.status(200);",
 									"});",
 									"",
-									"var schema =  pm.variables.get(\"task_schema_detail\");",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"task_schema\");",
 									"",
 									"pm.test('Schema is valid', function() {",
-									"  var result=tv4.validateResult(JSON.parse(responseBody), schema);",
+									"  var result=tv4.validateResult(jsResponse, schema);",
 									"",
 									"  if(!result.valid){",
 									"        console.log(result);",
@@ -33,8 +34,6 @@
 									"",
 									"});",
 									"",
-									"",
-									"var jsResponse = JSON.parse(responseBody);",
 									"",
 									"postman.setEnvironmentVariable(\"task_id\", jsResponse.Id);",
 									"",
@@ -86,11 +85,34 @@
 							"script": {
 								"id": "ee1fa783-b37c-451e-8479-559e72afd400",
 								"exec": [
-									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
 									"",
 									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_schema\");",
 									"",
-									"postman.setEnvironmentVariable(\"trading_partner_id\", jsResponse.Id);"
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									"",
+									"",
+									"postman.setEnvironmentVariable(\"trading_partner_id\", jsResponse.Id);",
+									"",
+									"",
+									"pm.test(\"Content is valid\", function () {",
+									"    pm.expect(jsResponse.Contacts[0].Name).to.eql(\"Jeff Star\");",
+									"});",
+									"",
+									"",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -188,7 +210,7 @@
 									"",
 									"console.log(\"test\");",
 									"",
-									"var schema =  pm.variables.get(\"task_schema_detail\");",
+									"var schema =  pm.variables.get(\"task_schema\");",
 									"",
 									"pm.test('Schema is valid', function() {",
 									"  var result=tv4.validateResult(JSON.parse(responseBody), schema);",
@@ -227,6 +249,35 @@
 				},
 				{
 					"name": "Task List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2281fe9b-1496-4ecb-950c-aba698b5beb4",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"console.log(\"test\");",
+									"",
+									"var schema =  pm.variables.get(\"task_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(JSON.parse(responseBody), schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -248,6 +299,35 @@
 				},
 				{
 					"name": "Task Filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c56763a1-e757-4131-b1a1-a14ff85cdeb3",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"console.log(\"test\");",
+									"",
+									"var schema =  pm.variables.get(\"task_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(JSON.parse(responseBody), schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -256,7 +336,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tasks?PageNumber=1&PageSize=5&name=Testss",
+							"raw": "{{base_url}}/tasks?PageNumber=1&PageSize=5&Description=Test",
 							"host": [
 								"{{base_url}}"
 							],
@@ -273,8 +353,8 @@
 									"value": "5"
 								},
 								{
-									"key": "name",
-									"value": "Testss"
+									"key": "Description",
+									"value": "Test"
 								}
 							]
 						}
@@ -283,6 +363,35 @@
 				},
 				{
 					"name": "Task Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "280858a6-db2b-48d7-8e82-5f3056772ff4",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"console.log(\"test\");",
+									"",
+									"var schema =  pm.variables.get(\"task_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(JSON.parse(responseBody), schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -318,6 +427,47 @@
 				},
 				{
 					"name": "Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c1cd4f74-3ff7-4929-ab3a-7424e30ab08d",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"task_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									"",
+									"var _task_id =  pm.variables.get(\"task_id\");",
+									"",
+									"pm.test(\"Content is valid\", function () {",
+									"    pm.expect(jsResponse.Name).to.eql(_task_id);",
+									"    pm.expect(jsResponse.Description).to.eql(\"New Task Description\");",
+									"    pm.expect(jsResponse.GlobalTracking).to.eql(false);",
+									"    pm.expect(jsResponse.GlobalArchiving).to.eql(true);",
+									"    pm.expect(jsResponse.Type).to.eql(\"External\");",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -328,7 +478,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"Id\": 1,\n  \"Name\": \"ATestss_________\",\n  \"Description\": \"Test ZoranD\",\n  \"GlobalTracking\": false,\n  \"GlobalArchiving\": true,\n  \"Type\": \"External\"\n}"
+							"raw": "{\n  \"Id\": {{task_id}},\n  \"Name\": \"{{task_id}}\",\n  \"Description\": \"New Task Description\",\n  \"GlobalTracking\": false,\n  \"GlobalArchiving\": true,\n  \"Type\": \"External\"\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/tasks",
@@ -349,6 +499,44 @@
 			"item": [
 				{
 					"name": "Create Property",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4d3b0280-8803-4aaf-a7d0-5b6f825bd30c",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"task_property_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									"",
+									"",
+									"postman.setEnvironmentVariable(\"task_property_id\", jsResponse.Id);",
+									"",
+									"",
+									"pm.test(\"Content is valid\", function () {",
+									"    pm.expect(jsResponse.Name).to.eql(\"PropName\");",
+									"    pm.expect(jsResponse.Value).to.eql(\"PropValue\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -359,16 +547,16 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"Name\": \"a\",\n  \"Value\": \"a\"\n}"
+							"raw": "{\n  \"Name\": \"PropName\",\n  \"Value\": \"PropValue\"\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/tasks/1/properties",
+							"raw": "{{base_url}}/tasks/{{task_id}}/properties",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tasks",
-								"1",
+								"{{task_id}}",
 								"properties"
 							]
 						}
@@ -383,7 +571,24 @@
 							"script": {
 								"id": "697cdedd-8c66-4154-8ab4-f19b4f2181b5",
 								"exec": [
-									"//var jsonData = JSON.parse(responseBody);",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"task_property_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									"",
 									"",
 									"",
 									""
@@ -400,15 +605,15 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tasks/1/properties/1",
+							"raw": "{{base_url}}/tasks/{{task_id}}/properties/{{task_property_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tasks",
-								"1",
+								"{{task_id}}",
 								"properties",
-								"1"
+								"{{task_property_id}}"
 							]
 						}
 					},
@@ -416,6 +621,35 @@
 				},
 				{
 					"name": "Get Properties",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "eba16010-cd00-4e0d-acb4-f1de1b98c939",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"task_property_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -424,13 +658,13 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tasks/1/properties",
+							"raw": "{{base_url}}/tasks/{{task_id}}/properties",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tasks",
-								"1",
+								"{{task_id}}",
 								"properties"
 							]
 						}
@@ -439,6 +673,35 @@
 				},
 				{
 					"name": "Get Properties SearchQuery",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "988d2288-d5c7-4c1f-b5f9-097c9fa8d69a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"task_property_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -447,19 +710,19 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tasks/1/properties?searchQuery=z",
+							"raw": "{{base_url}}/tasks/{{task_id}}/properties?searchQuery=PropName",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tasks",
-								"1",
+								"{{task_id}}",
 								"properties"
 							],
 							"query": [
 								{
 									"key": "searchQuery",
-									"value": "z"
+									"value": "PropName"
 								}
 							]
 						}
@@ -468,6 +731,42 @@
 				},
 				{
 					"name": "Update Property",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ec3295fb-6300-4280-abf0-4022bc170c8c",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"task_property_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									"",
+									"",
+									"var _task_property_id =  pm.variables.get(\"task_property_id\");",
+									"",
+									"pm.test(\"Content is valid\", function () {",
+									"    pm.expect(jsResponse.Name).to.eql(\"A\");",
+									"    pm.expect(jsResponse.Value).to.eql(\"B\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -478,16 +777,16 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"Id\": 1,\n  \"Name\": \"A\",\n  \"Value\": \"B\"\n}"
+							"raw": "{\n  \"Id\": {{task_property_id}},\n  \"Name\": \"A\",\n  \"Value\": \"B\"\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/tasks/1/properties",
+							"raw": "{{base_url}}/tasks/{{task_id}}/properties",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tasks",
-								"1",
+								"{{task_id}}",
 								"properties"
 							]
 						}
@@ -496,6 +795,21 @@
 				},
 				{
 					"name": "Delete Property",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4c33939a-48f9-4071-9f29-1ee242e38d92",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -504,15 +818,15 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tasks/1/properties/1002",
+							"raw": "{{base_url}}/tasks/{{task_id}}/properties/{{task_property_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tasks",
-								"1",
+								"{{task_id}}",
 								"properties",
-								"1002"
+								"{{task_property_id}}"
 							]
 						}
 					},
@@ -525,6 +839,44 @@
 			"item": [
 				{
 					"name": "Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "381039f8-4f92-4ab9-bbfe-5aa2c11cc528",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"task_parameter_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									"",
+									"",
+									"postman.setEnvironmentVariable(\"task_parameter_id\", jsResponse.Id);",
+									"",
+									"",
+									"pm.test(\"Content is valid\", function () {",
+									"    pm.expect(jsResponse.Key).to.eql(\"A\");",
+									"    pm.expect(jsResponse.Required).to.eql(true);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -538,13 +890,13 @@
 							"raw": "{\n    \"Key\": \"A\",\n    \"Description\": \"Test\",\n    \"Required\": true,\n    \"Type\": \"Text\"\n  }"
 						},
 						"url": {
-							"raw": "{{base_url}}/tasks/1/parameters",
+							"raw": "{{base_url}}/tasks/{{task_id}}/parameters",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tasks",
-								"1",
+								"{{task_id}}",
 								"parameters"
 							]
 						}
@@ -553,38 +905,31 @@
 				},
 				{
 					"name": "Get",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{base_url}}/tasks/1/parameters/1",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"tasks",
-								"1",
-								"parameters",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get List",
 					"event": [
 						{
-							"listen": "prerequest",
+							"listen": "test",
 							"script": {
-								"type": "text/javascript",
+								"id": "1848ea26-68e9-4d45-9abb-200b8cdccc37",
 								"exec": [
-									"console.log('Test');"
-								]
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"task_parameter_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -596,21 +941,60 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tasks/1/parameters",
+							"raw": "{{base_url}}/tasks/1/parameters/{{task_parameter_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tasks",
 								"1",
-								"parameters"
+								"parameters",
+								"{{task_parameter_id}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get SearchQuery",
+					"name": "Get List",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "86628688-29ad-40b8-bb5e-5ff48f23eaef",
+								"exec": [
+									"console.log('Test');"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "50960c21-5300-41d3-abd8-d7278b7035b9",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"task_parameter_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -619,19 +1003,70 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tasks/1/parameters?searchQuery=z",
+							"raw": "{{base_url}}/tasks/{{task_id}}/parameters",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tasks",
-								"1",
+								"{{task_id}}",
+								"parameters"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get SearchQuery",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "826eeeeb-78e5-4453-9f0a-95a9e2650337",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"task_parameter_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/{{task_id}}/parameters?searchQuery=A",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"{{task_id}}",
 								"parameters"
 							],
 							"query": [
 								{
 									"key": "searchQuery",
-									"value": "z"
+									"value": "A"
 								}
 							]
 						}
@@ -640,6 +1075,41 @@
 				},
 				{
 					"name": "Update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a72f3f34-74ea-430f-a30d-9c20f8a7646d",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"task_parameter_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									"",
+									"var _task_parameter_id =  pm.variables.get(\"task_parameter_id\");",
+									"",
+									"pm.test(\"Content is valid\", function () {",
+									"    pm.expect(jsResponse.Key).to.eql(_task_parameter_id);",
+									"    pm.expect(jsResponse.Description).to.eql(\"Test\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -650,16 +1120,16 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"Id\": 1,\n  \"Key\": \"taskname ZZZZZ\",\n  \"Description\": \"Test\",\n  \"Required\": true,\n  \"Type\": \"Text\"\n}"
+							"raw": "{\n  \"Id\": {{task_parameter_id}},\n  \"Key\": \"{{task_parameter_id}}\",\n  \"Description\": \"Test\",\n  \"Required\": true,\n  \"Type\": \"Text\"\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/tasks/1/parameters",
+							"raw": "{{base_url}}/tasks/{{task_id}}/parameters",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tasks",
-								"1",
+								"{{task_id}}",
 								"parameters"
 							]
 						}
@@ -668,20 +1138,34 @@
 				},
 				{
 					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "868657a7-3da6-46f6-bd6a-663e16c87a99",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"body": {},
 						"url": {
-							"raw": "{{base_url}}/tasks/1/parameters/2003",
+							"raw": "{{base_url}}/tasks/{{task_id}}/parameters/{{task_parameter_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tasks",
-								"1",
+								"{{task_id}}",
 								"parameters",
-								"2003"
+								"{{task_parameter_id}}"
 							]
 						}
 					},
