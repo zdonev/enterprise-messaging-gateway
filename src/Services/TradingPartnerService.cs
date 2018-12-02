@@ -104,7 +104,7 @@ namespace EnterpriseMessagingGateway.Services
         {
             var entity = AutoMapper.Mapper.Map<TradingPartnerContactProperty>(dto);
 
-            var contact = _contactRepository.GetById(tpid);
+            var contact = _contactRepository.GetById(contactid);
             entity.Contact = contact;
             _contactPropRepository.Add(entity);
 

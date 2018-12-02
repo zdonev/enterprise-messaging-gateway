@@ -9,7 +9,7 @@
 			"name": "Setup",
 			"item": [
 				{
-					"name": "Task",
+					"name": "Create Task",
 					"event": [
 						{
 							"listen": "test",
@@ -1178,6 +1178,34 @@
 			"item": [
 				{
 					"name": "Get Trading Partner",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d65abe04-173a-47a8-b312-d1d5718b0564",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [
@@ -1191,13 +1219,13 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1"
+								"{{trading_partner_id}}"
 							]
 						}
 					},
@@ -1205,6 +1233,44 @@
 				},
 				{
 					"name": "Update Trading Partner",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f581cb97-6cdc-45cc-8133-95a3e4267970",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									"",
+									"var _tp_id =  pm.variables.get(\"trading_partner_id\");",
+									"",
+									"pm.test(\"Content is valid\", function () {",
+									"    pm.expect(jsResponse.Name).to.eql(_tp_id);",
+									"    pm.expect(jsResponse.Description).to.eql(\"Trading Partner Northern Star\");",
+									"    pm.expect(jsResponse.IsEnabled).to.eql(true);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -1215,7 +1281,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"Id\": 1002,\n  \"Name\": \"TPXXX\",\n  \"Description\": \"Trading Partner Northern Star\",\n  \"IsEnabled\": true\n}"
+							"raw": "{\n  \"Id\": {{trading_partner_id}},\n  \"Name\": \"{{trading_partner_id}}\",\n  \"Description\": \"Trading Partner Northern Star\",\n  \"IsEnabled\": true\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/tradingpartners/",
@@ -1232,6 +1298,35 @@
 				},
 				{
 					"name": "Get Trading Partner Filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ac03bca9-bcaf-4253-a746-e8d529bed07b",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [
@@ -1264,6 +1359,35 @@
 				},
 				{
 					"name": "Get Trading Partner OrderBy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "748bd457-d0a9-4e5e-a2a8-c252c1dec8c5",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [
@@ -1277,7 +1401,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners?OrderBy=Name desc&Name=3M&PropertyName=SendEmailNotification",
+							"raw": "{{base_url}}/tradingpartners?OrderBy=Name desc&Name={{trading_partner_id}}&PropertyName=IsEnabled",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1291,11 +1415,11 @@
 								},
 								{
 									"key": "Name",
-									"value": "3M"
+									"value": "{{trading_partner_id}}"
 								},
 								{
 									"key": "PropertyName",
-									"value": "SendEmailNotification"
+									"value": "IsEnabled"
 								}
 							]
 						}
@@ -1309,6 +1433,45 @@
 			"item": [
 				{
 					"name": "Create Property",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d0606994-15ea-4a75-96d3-2149e55ce708",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_property_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									"",
+									"",
+									"postman.setEnvironmentVariable(\"trading_partner_property_id\", jsResponse.Id);",
+									"",
+									"",
+									"pm.test(\"Content is valid\", function () {",
+									"    pm.expect(jsResponse.Name).to.eql(\"External\");",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1319,16 +1482,16 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"Name\": \"a\",\n  \"Value\": \"a\"\n}"
+							"raw": "{\n  \"Name\": \"External\",\n  \"Value\": \"true\"\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/properties",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/properties",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"properties"
 							]
 						}
@@ -1337,6 +1500,34 @@
 				},
 				{
 					"name": "Get Property",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "84c551b9-cd2b-4a43-bcec-c2d47fbaf2d5",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_property_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1345,15 +1536,15 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/properties/1",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/properties/{{trading_partner_property_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"properties",
-								"1"
+								"{{trading_partner_property_id}}"
 							]
 						}
 					},
@@ -1361,6 +1552,34 @@
 				},
 				{
 					"name": "Get Properties",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "411096a6-e988-456c-91f5-88687ef61329",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_property_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1369,13 +1588,13 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/properties",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/properties",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"properties"
 							]
 						}
@@ -1384,6 +1603,34 @@
 				},
 				{
 					"name": "Get Properties SearchQuery",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b8e40467-68ab-4126-8ef1-b7f7c621d081",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_property_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1392,19 +1639,19 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/properties?searchQuery=z",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/properties?searchQuery=e",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"properties"
 							],
 							"query": [
 								{
 									"key": "searchQuery",
-									"value": "z"
+									"value": "e"
 								}
 							]
 						}
@@ -1413,6 +1660,39 @@
 				},
 				{
 					"name": "Update Property",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1b631e82-985e-498f-8cc6-bdf3f442f72c",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_property_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									"",
+									"pm.test(\"Content is valid\", function () {",
+									"    pm.expect(jsResponse.Name).to.eql(\"A\");",
+									"    pm.expect(jsResponse.Value).to.eql(\"B\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -1423,16 +1703,16 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"Id\": 1,\n  \"Name\": \"A\",\n  \"Value\": \"B\"\n}"
+							"raw": "{\n  \"Id\": {{trading_partner_property_id}},\n  \"Name\": \"A\",\n  \"Value\": \"B\"\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/properties",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/properties",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"properties"
 							]
 						}
@@ -1441,6 +1721,20 @@
 				},
 				{
 					"name": "Delete Property",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "aba63c51-cc16-4791-9736-ed584f994372",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -1449,15 +1743,15 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/properties/1002",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/properties/{{trading_partner_property_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"properties",
-								"1002"
+								"{{trading_partner_property_id}}"
 							]
 						}
 					},
@@ -1470,6 +1764,45 @@
 			"item": [
 				{
 					"name": "Create Identifier",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7e6b9baf-e5be-4993-8bb4-bb72f82c2a7d",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_identifier_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									"",
+									"",
+									"postman.setEnvironmentVariable(\"trading_partner_identifier_id\", jsResponse.Id);",
+									"",
+									"",
+									"pm.test(\"Content is valid\", function () {",
+									"    pm.expect(jsResponse.Identifier).to.eql(\"a\");",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1480,16 +1813,16 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"Qualifier\": \"a\",\n  \"Identifier\": \"a\"\n}\n"
+							"raw": "{\n  \"Qualifier\": \"{{$guid}}\",\n  \"Identifier\": \"a\"\n}\n"
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/identifiers",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/identifiers",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"identifiers"
 							]
 						}
@@ -1498,6 +1831,34 @@
 				},
 				{
 					"name": "Get Identifier",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9b724dbf-4f96-42c8-8abe-4ec1c2b160b6",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_identifier_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1506,15 +1867,15 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/identifiers/1",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/identifiers/{{trading_partner_identifier_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"identifiers",
-								"1"
+								"{{trading_partner_identifier_id}}"
 							]
 						}
 					},
@@ -1522,6 +1883,34 @@
 				},
 				{
 					"name": "Get Identifiers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5402775e-fd74-4574-b7bb-40f9cbf33504",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_identifier_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1530,13 +1919,13 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/identifiers",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/identifiers",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"identifiers"
 							]
 						}
@@ -1545,6 +1934,34 @@
 				},
 				{
 					"name": "Get Identifiers SearchQuery",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e5a7572f-3283-4c40-9a4c-cb85e121cf78",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_identifier_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1553,19 +1970,19 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/identifiers?searchQuery=i",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/identifiers?searchQuery=a",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"identifiers"
 							],
 							"query": [
 								{
 									"key": "searchQuery",
-									"value": "i"
+									"value": "a"
 								}
 							]
 						}
@@ -1574,6 +1991,41 @@
 				},
 				{
 					"name": "Update Identifier",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "78dfe4d4-717e-4a11-9045-b5a5c00fab6d",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_identifier_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									"",
+									"var _tpi_id =  pm.variables.get(\"trading_partner_identifier_id\");",
+									"",
+									"pm.test(\"Content is valid\", function () {",
+									"    pm.expect(jsResponse.Qualifier).to.eql(_tpi_id);",
+									"    pm.expect(jsResponse.Identifier).to.eql(_tpi_id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -1584,16 +2036,16 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"Id\": 1,\n  \"Qualifier\": \"A\",\n  \"Identifier\": \"B\"\n}\n"
+							"raw": "{\n  \"Id\": {{trading_partner_identifier_id}},\n  \"Qualifier\": \"{{trading_partner_identifier_id}}\",\n  \"Identifier\": \"{{trading_partner_identifier_id}}\"\n}\n"
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/identifiers",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/identifiers",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"identifiers"
 							]
 						}
@@ -1602,6 +2054,20 @@
 				},
 				{
 					"name": "Delete Identifier",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0a198693-0dd7-4365-b842-48b998a9b16f",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -1610,15 +2076,15 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/identifiers/1002",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/identifiers/{{trading_partner_identifier_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"identifiers",
-								"1002"
+								"{{trading_partner_identifier_id}}"
 							]
 						}
 					},
@@ -1631,6 +2097,45 @@
 			"item": [
 				{
 					"name": "Create Contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "956baa07-abff-4c25-9f98-803c8197637d",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_contact_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									"",
+									"",
+									"postman.setEnvironmentVariable(\"trading_partner_contact_id\", jsResponse.Id);",
+									"",
+									"",
+									"pm.test(\"Content is valid\", function () {",
+									"    pm.expect(jsResponse.Role).to.eql(\"IT\");",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1644,13 +2149,13 @@
 							"raw": "{\n      \"Name\": \"Zoran Donev\",\n      \"Role\": \"IT\",\n      \"Email\": \"zd@gmail.com\",\n      \"Phone\": \"507-720-4000\",\n      \"Street\": \"109 Street Sample\",\n      \"City\": \"Mankato\",\n      \"State\": \"MN\",\n      \"PostalCode\": \"56001\",\n      \"Country\": \"USA\",\n      \"Properties\": [\n        {\n          \"Name\": \"IsPrimary\",\n          \"Value\": \"true\"\n        },\n        {\n          \"Name\": \"IsActive\",\n          \"Value\": \"false\"\n        }\n      ]\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/contacts/",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/contacts/",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"contacts",
 								""
 							]
@@ -1660,6 +2165,35 @@
 				},
 				{
 					"name": "Get Contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fe2a81ff-0750-46c7-a97d-ed1b3c6ac6da",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_contact_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1668,15 +2202,15 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/contacts/1",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/contacts/{{trading_partner_contact_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"contacts",
-								"1"
+								"{{trading_partner_contact_id}}"
 							]
 						}
 					},
@@ -1684,6 +2218,34 @@
 				},
 				{
 					"name": "Get Contacts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e1c4b8c0-ccd1-47cc-8453-576697003f2d",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_contact_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1692,13 +2254,13 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/contacts",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/contacts",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"contacts"
 							]
 						}
@@ -1707,6 +2269,52 @@
 				},
 				{
 					"name": "Update Contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3f98e642-616d-4758-b3af-b6f1537494af",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_contact_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									"",
+									"",
+									"pm.test(\"Content is valid\", function () {",
+									"    pm.expect(jsResponse.Name).to.eql(\"Z\");",
+									"    pm.expect(jsResponse.Role).to.eql(\"Z\");",
+									"    pm.expect(jsResponse.Email).to.eql(\"Z\");",
+									"    pm.expect(jsResponse.Phone).to.eql(\"Z\");",
+									"    pm.expect(jsResponse.Street).to.eql(\"Z\");",
+									"    pm.expect(jsResponse.City).to.eql(\"Z\");",
+									"    pm.expect(jsResponse.State).to.eql(\"Z\");",
+									"    pm.expect(jsResponse.PostalCode).to.eql(\"Z\");",
+									"    pm.expect(jsResponse.Country).to.eql(\"Z\");",
+									"});",
+									"",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -1717,41 +2325,17 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"Id\": 1003,\n  \"Name\": \"Z\",\n  \"Role\": \"Z\",\n  \"Email\": \"Z\",\n  \"Phone\": \"Z\",\n  \"Street\": \"Z\",\n  \"City\": \"Z\",\n  \"State\": \"Z\",\n  \"PostalCode\": \"Z\",\n  \"Country\": \"Z\"\n}"
+							"raw": "{\n  \"Id\": {{trading_partner_contact_id}},\n  \"Name\": \"Z\",\n  \"Role\": \"Z\",\n  \"Email\": \"Z\",\n  \"Phone\": \"Z\",\n  \"Street\": \"Z\",\n  \"City\": \"Z\",\n  \"State\": \"Z\",\n  \"PostalCode\": \"Z\",\n  \"Country\": \"Z\"\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/contacts",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/contacts",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"contacts"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Contact",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/contacts/5",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"tradingpartners",
-								"1",
-								"contacts",
-								"5"
 							]
 						}
 					},
@@ -1764,6 +2348,46 @@
 			"item": [
 				{
 					"name": "Create Property",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "83b2285a-ca88-4496-add5-185574e2673f",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_contactproperty_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									"",
+									"",
+									"postman.setEnvironmentVariable(\"trading_partner_contactproperty_id\", jsResponse.Id);",
+									"",
+									"",
+									"pm.test(\"Content is valid\", function () {",
+									"    pm.expect(jsResponse.Name).to.eql(\"TestProperty\");",
+									"    pm.expect(jsResponse.Value).to.eql(\"TestProperty\");",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1774,18 +2398,18 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"Name\": \"a\",\n  \"Value\": \"a\"\n}"
+							"raw": "{\n  \"Name\": \"TestProperty\",\n  \"Value\": \"TestProperty\"\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/contacts/1/properties",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/contacts/{{trading_partner_contact_id}}/properties",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"contacts",
-								"1",
+								"{{trading_partner_contact_id}}",
 								"properties"
 							]
 						}
@@ -1794,6 +2418,35 @@
 				},
 				{
 					"name": "Get Property",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "84af934b-ef9a-4f6f-9b1d-0d01adb4bacb",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_contactproperty_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1802,17 +2455,17 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/contacts/1/properties/1",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/contacts/{{trading_partner_contact_id}}/properties/{{trading_partner_contactproperty_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"contacts",
-								"1",
+								"{{trading_partner_contact_id}}",
 								"properties",
-								"1"
+								"{{trading_partner_contactproperty_id}}"
 							]
 						}
 					},
@@ -1820,6 +2473,35 @@
 				},
 				{
 					"name": "Get Properties",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "706c8830-b490-4422-8577-8e6aed7c4e3b",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_contactproperty_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1828,15 +2510,15 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/contacts/1/properties",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/contacts/{{trading_partner_contact_id}}/properties",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"contacts",
-								"1",
+								"{{trading_partner_contact_id}}",
 								"properties"
 							]
 						}
@@ -1853,21 +2535,21 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/contacts/1/properties?searchQuery=z",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/contacts/{{trading_partner_contact_id}}/properties?searchQuery=a",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"contacts",
-								"1",
+								"{{trading_partner_contact_id}}",
 								"properties"
 							],
 							"query": [
 								{
 									"key": "searchQuery",
-									"value": "z"
+									"value": "a"
 								}
 							]
 						}
@@ -1876,6 +2558,40 @@
 				},
 				{
 					"name": "Update Property",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a7d77946-a2af-4625-bd38-7c55908b307a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsResponse = JSON.parse(responseBody);",
+									"var schema =  pm.variables.get(\"trading_partner_contactproperty_schema\");",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  var result=tv4.validateResult(jsResponse, schema);",
+									"",
+									"  if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"    ",
+									"pm.expect(result.valid).to.be.true;",
+									"",
+									"});",
+									"",
+									"",
+									"pm.test(\"Content is valid\", function () {",
+									"    pm.expect(jsResponse.Name).to.eql(\"A\");",
+									"    pm.expect(jsResponse.Value).to.eql(\"B\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -1886,18 +2602,18 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"Id\": 1007,\n  \"Name\": \"A\",\n  \"Value\": \"B\"\n}"
+							"raw": "{\n  \"Id\": {{trading_partner_contactproperty_id}},\n  \"Name\": \"A\",\n  \"Value\": \"B\"\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/contacts/1/properties",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/contacts/{{trading_partner_contact_id}}/properties",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"contacts",
-								"1",
+								"{{trading_partner_contact_id}}",
 								"properties"
 							]
 						}
@@ -1906,6 +2622,20 @@
 				},
 				{
 					"name": "Delete Property",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6a19910e-9995-44a8-94b9-ab4cb17d050c",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -1914,17 +2644,17 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base_url}}/tradingpartners/1/contacts/1/properties/1008",
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/contacts/{{trading_partner_contact_id}}/properties/{{trading_partner_contactproperty_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tradingpartners",
-								"1",
+								"{{trading_partner_id}}",
 								"contacts",
-								"1",
+								"{{trading_partner_contact_id}}",
 								"properties",
-								"1008"
+								"{{trading_partner_contactproperty_id}}"
 							]
 						}
 					},
@@ -2136,6 +2866,44 @@
 		{
 			"name": "Cleanup",
 			"item": [
+				{
+					"name": "Delete Contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3d4b8c98-dc93-4c11-b8a1-60c74f14b76c",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/tradingpartners/{{trading_partner_id}}/contacts/{{trading_partner_contact_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tradingpartners",
+								"{{trading_partner_id}}",
+								"contacts",
+								"{{trading_partner_contact_id}}"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "Task",
 					"event": [
